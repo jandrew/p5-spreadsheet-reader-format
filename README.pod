@@ -10,12 +10,12 @@ Spreadsheet::Reader::Format - Formatting for various spreadsheet readers
 	<img src="https://img.shields.io/badge/perl-5.10+-brightgreen.svg" alt="perl version">
 </a>
 
-<a href="https://travis-ci.org/jandrew/Spreadsheet-Reader-Format">
-	<img alt="Build Status" src="https://travis-ci.org/jandrew/Spreadsheet-Reader-Format.png?branch=master" alt='Travis Build'/>
+<a href="https://travis-ci.org/jandrew/p5-spreadsheet-reader-format">
+	<img alt="Build Status" src="https://travis-ci.org/jandrew/p5-spreadsheet-reader-format.png?branch=master" alt='Travis Build'/>
 </a>
 
-<a href='https://coveralls.io/r/jandrew/Spreadsheet-Reader-Format?branch=master'>
-	<img src='https://coveralls.io/repos/jandrew/Spreadsheet-Reader-Format/badge.svg?branch=master' alt='Coverage Status' />
+<a href='https://coveralls.io/r/jandrew/p5-spreadsheet-reader-format?branch=master'>
+	<img src='https://coveralls.io/repos/jandrew/p5-spreadsheet-reader-format/badge.svg?branch=master' alt='Coverage Status' />
 </a>
 
 <a href='https://github.com/jandrew/p5-spreadsheet-reader-format'>
