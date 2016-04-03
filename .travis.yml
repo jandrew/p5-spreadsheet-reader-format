@@ -10,10 +10,10 @@ perl:
   - 5.22
 matrix:
   include:
-    - perl: 5.22
+    - perl: 5.20
       env: COVERAGE=1
 before_install:
   - eval $(curl https://travis-perl.github.io/init) --auto
-script:
-  - perl Makefile.PL
-  - make test TEST_VERBOSE=1
+# script:
+#  - perl Makefile.PL
+#  - make test TEST_VERBOSE=1

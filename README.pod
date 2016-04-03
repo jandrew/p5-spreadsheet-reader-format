@@ -14,8 +14,8 @@ Spreadsheet::Reader::Format - Formatting for various spreadsheet readers
 	<img alt="Build Status" src="https://travis-ci.org/jandrew/p5-spreadsheet-reader-format.png?branch=master" alt='Travis Build'/>
 </a>
 
-<a href='https://coveralls.io/r/jandrew/p5-spreadsheet-reader-format?branch=master'>
-	<img src='https://coveralls.io/repos/jandrew/p5-spreadsheet-reader-format/badge.svg?branch=master' alt='Coverage Status' />
+<a href='https://coveralls.io/github/jandrew/p5-spreadsheet-reader-format?branch=master'>
+	<img src='https://coveralls.io/repos/github/jandrew/p5-spreadsheet-reader-format/badge.svg?branch=master' alt='Coverage Status' />
 </a>
 
 <a href='https://github.com/jandrew/p5-spreadsheet-reader-format'>
