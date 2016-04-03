@@ -5,6 +5,7 @@
 use strict;
 use warnings;
 
+use 5.010;
 use ExtUtils::MakeMaker 7.04;
 
 my %WriteMakefileArgs = (
@@ -15,15 +16,68 @@ my %WriteMakefileArgs = (
   },
   "DISTNAME" => "Spreadsheet-Reader-Format",
   "LICENSE" => "perl",
+  "MIN_PERL_VERSION" => "5.010",
   "NAME" => "Spreadsheet::Reader::Format",
-  "PREREQ_PM" => {},
-  "VERSION" => "v0.1_1",
+  "PREREQ_PM" => {
+    "Carp" => 0,
+    "Clone" => 0,
+    "DateTime" => 0,
+    "DateTime::Format::Flexible" => 0,
+    "DateTimeX::Format::Excel" => "0.012",
+    "Encode" => 0,
+    "IO::File" => 0,
+    "Moose" => 0,
+    "Moose::Role" => 0,
+    "Type::Coercion" => 0,
+    "Type::Library" => "1.000",
+    "Type::Tiny" => 0,
+    "Type::Utils" => 0,
+    "Types::Standard" => 0,
+    "lib" => 0,
+    "strict" => 0,
+    "version" => "0.77",
+    "warnings" => 0
+  },
+  "TEST_REQUIRES" => {
+    "Capture::Tiny" => 0,
+    "Data::Dumper" => 0,
+    "MooseX::ShortCut::BuildInstance" => "v1.8.0",
+    "Test::Moose" => 0,
+    "Test::Most" => 0,
+    "Test::TypeTiny" => 0
+  },
+  "VERSION" => "v0.1_3",
   "test" => {
     "TESTS" => "t/Spreadsheet/Reader/*.t t/Spreadsheet/Reader/Format/*.t"
   }
 );
 
-my %FallbackPrereqs = ();
+my %FallbackPrereqs = (
+  "Capture::Tiny" => 0,
+  "Carp" => 0,
+  "Clone" => 0,
+  "Data::Dumper" => 0,
+  "DateTime" => 0,
+  "DateTime::Format::Flexible" => 0,
+  "DateTimeX::Format::Excel" => "0.012",
+  "Encode" => 0,
+  "IO::File" => 0,
+  "Moose" => 0,
+  "Moose::Role" => 0,
+  "MooseX::ShortCut::BuildInstance" => "1.8.0",
+  "Test::Moose" => 0,
+  "Test::Most" => 0,
+  "Test::TypeTiny" => 0,
+  "Type::Coercion" => 0,
+  "Type::Library" => "1.000",
+  "Type::Tiny" => 0,
+  "Type::Utils" => 0,
+  "Types::Standard" => 0,
+  "lib" => 0,
+  "strict" => 0,
+  "version" => "0.77",
+  "warnings" => 0
+);
 
 unless ( eval { ExtUtils::MakeMaker->VERSION(6.63_03) } ) {
   delete $WriteMakefileArgs{TEST_REQUIRES};
