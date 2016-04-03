@@ -1,0 +1,56 @@
+{
+   "abstract" : "Formatting for various spreadsheet readers",
+   "author" : [
+      "Jed Lund <jandrew@cpan.org>"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "Dist::Zilla version 5.043, CPAN::Meta::Converter version 2.150005",
+   "license" : [
+      "perl_5"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : 2
+   },
+   "name" : "p5-spreadsheet-reader-format",
+   "prereqs" : {
+      "configure" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "7.04"
+         }
+      }
+   },
+   "provides" : {
+      "Spreadsheet::Reader::Format" : {
+         "file" : "lib/Spreadsheet/Reader/Format.pm",
+         "version" : "v0.11.0"
+      },
+      "Spreadsheet::Reader::Format::FmtDefault" : {
+         "file" : "lib/Spreadsheet/Reader/Format/FmtDefault.pm",
+         "version" : "v0.11.0"
+      },
+      "Spreadsheet::Reader::Format::ParseExcelFormatStrings" : {
+         "file" : "lib/Spreadsheet/Reader/Format/ParseExcelFormatStrings.pm",
+         "version" : "v0.11.0"
+      },
+      "Spreadsheet::Reader::Format::Types" : {
+         "file" : "lib/Spreadsheet/Reader/Format/Types.pm",
+         "version" : "v0.11.0"
+      }
+   },
+   "release_status" : "testing",
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/jandrew/p5-spreadsheet-reader-format/issues"
+      },
+      "homepage" : "https://github.com/jandrew/p5-spreadsheet-reader-format",
+      "repository" : {
+         "type" : "git",
+         "url" : "https://github.com/jandrew/p5-spreadsheet-reader-format.git",
+         "web" : "https://github.com/jandrew/p5-spreadsheet-reader-format"
+      }
+   },
+   "version" : "v0.1_1",
+   "x_authority" : "cpan:JANDREW"
+}
+

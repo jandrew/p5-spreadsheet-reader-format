@@ -1,46 +1,4 @@
-package Spreadsheet::Reader::Format;
-use version  0.77; our $VERSION = version->declare('v0.1_1');
-###LogSD	warn "You uncovered internal logging statements for Spreadsheet::Reader::Format-$VERSION";
-
-use 5.010;
-use Moose::Role;
-requires qw(
-		get_excel_region			has_target_encoding
-		get_target_encoding			set_target_encoding
-		change_output_encoding		set_defined_excel_formats
-		get_defined_conversion		parse_excel_format_string
-		set_cache_behavior			set_date_behavior
-		set_european_first			set_workbook_inst
-	);
-
-#########1 Dispatch Tables & Package Variables    5#########6#########7#########8#########9
-
-
-
-#########1 Public Attributes  3#########4#########5#########6#########7#########8#########9
-
-
-
-#########1 Public Methods     3#########4#########5#########6#########7#########8#########9
-
-###LogSD	sub get_class_space{ 'ExcelFormatInterface' }
-
-#########1 Private Attributes 3#########4#########5#########6#########7#########8#########9
-
-
-
-#########1 Private Methods    3#########4#########5#########6#########7#########8#########9
-
-
-
-#########1 Phinish            3#########4#########5#########6#########7#########8#########9
-
-no Moose::Role;
-	
-1;
-
-#########1 Documentation      3#########4#########5#########6#########7#########8#########9
-__END__
+=pod
 
 =head1 NAME
 
@@ -349,5 +307,3 @@ All lines in this package that use Log::Shiras are commented out
 =back
 
 =cut
-
-#########1#########2 main pod documentation end   5#########6#########7#########8#########9

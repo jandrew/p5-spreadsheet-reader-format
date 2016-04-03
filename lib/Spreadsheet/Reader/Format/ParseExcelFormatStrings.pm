@@ -1850,7 +1850,33 @@ Spreadsheet::Reader::Format::ParseExcelFormatStrings - Convert Excel format stri
 
 =head1 SYNOPSYS
 
-See the L<Spreadsheet::Reader::Format::FormatInterface/SYNOPSYS>
+	#!/usr/bin/env perl
+	package MyPackage;
+	use Moose;
+		
+	use lib '../../../../lib';
+	extends	'Spreadsheet::Reader::Format::FmtDefault';
+	# call 'with' a second time to ensure that the prior methods are recorded
+	with	'Spreadsheet::Reader::Format::ParseExcelFormatStrings';
+
+	package main;
+
+	my	$parser 		= MyPackage->new( epoch_year => 1904 );
+	my	$conversion	= $parser->parse_excel_format_string( '[$-409]dddd, mmmm dd, yyyy;@' );
+	print 'For conversion named: ' . $conversion->name . "\n";
+	for my	$unformatted_value ( '7/4/1776 11:00.234 AM', 0.112311 ){
+		print "Unformatted value: $unformatted_value\n";
+		print "..coerces to: " . $conversion->assert_coerce( $unformatted_value ) . "\n";
+	}
+
+	###########################
+	# SYNOPSIS Screen Output
+	# 01: For conversion named: DATESTRING
+	# 02: Unformatted value: 7/4/1776 11:00.234 AM
+	# 03: ..coerces to: Thursday, July 04, 1776
+	# 04: Unformatted value: 0.112311
+	# 05: ..coerces to: Monday, January 01, 1900
+	###########################
 
 =head1 DESCRIPTION
 
@@ -1858,35 +1884,32 @@ This is the parser that converts Excel custom format strings into code that can 
 to transform values into output matching the form defined by the format string.  The goal 
 of this code is to support as much as possible the definition of L<excel custom format strings
 |https://support.office.com/en-us/article/Create-or-delete-a-custom-number-format-78f2a361-936b-4c03-8772-09fab54be7f4>.  
-If you find cases where this parser and the Excel definition differ please log a case in 
-L<github|https://github.com/jandrew/Spreadsheet-XLSX-Reader-LibXML/issues>.
+If you find cases where this parser and the Excel definition or excecution differ please 
+log a case in L<github|https://github.com/jandrew/Spreadsheet-XLSX-Reader-LibXML/issues>.
 
 This parser converts the format strings to L<Type::Tiny> objects that have the appropriate 
 built in coercions.  Any replacement of this engine for use with 
-L<Spreadsheet::Reader::Format> must output code that has the methods 'display_name' 
-and 'assert_coerce'.  Display name is used by the overall package to determine the cell 
-type and should return a name containing the work date or number for date and number types 
-othewise the cell type is assumed to be text.  The package uses 'assert_coerce' as the 
-method to transform the raw value to the formatted value.  Excel defines the format 
-strings as number conversions only (They do not act on text).  Excel format strings can 
-have up to four parts separated by semi-colons.  The four parts are positive, zero, 
-negative, and text.  In Excel the text section is just a pass through.  I<This is how excel 
-handles L<dates earlier than 1900sh|DateTimeX::Format::Excel/DESCRIPTION>>.  This parser 
-deviates from that for dates.  Since this parser provides code that parses Excel date 
-numbers into a L<DateTime> object (and then L<potentially back|/datetime_dates> to a 
-differently formatted string) it also attempts to parse strings to DateTime objects if 
-the cell has a date format applied.  All other types of Excel number conversions still 
-treat strings as a pass through.
+L<Spreadsheet::Reader::Format> I<and L<Spreadsheet::Reader::ExcelXML>> must output objects 
+that have the methods 'display_name' and 'assert_coerce'.  'display_name' is used by the 
+overall package to determine the cell type and should return a unique name containing an 
+indication of the output data type with either 'DATE' or 'NUMBER' in the name.  Otherwise 
+the cell type is assumed to be text.  L<Spreadsheet::Reader::ExcelXML> uses 'assert_coerce' 
+as the method to transform the raw value to the formatted value.
+
+Excel format strings can have up to four parts separated by semi-colons.  The four parts 
+are positive, zero, negative, and text.  In the Excel application the text section is just 
+a pass through.  I<This is how excel handles L<dates earlier than 1900sh
+|DateTimeX::Format::Excel/DESCRIPTION>>.  This parser deviates from that for dates.  Since 
+this parser provides code that parses Excel date numbers into a L<DateTime> object (and 
+then L<potentially back|/datetime_dates> to a differently formatted string) it also 
+attempts to parse strings to DateTime objects if the cell has a date format applied.  All 
+other types of Excel number conversions still treat strings as a pass through.
 
 To replace this module just build a L<Moose::Role|Moose::Manual::Roles> that delivers 
 the method L<parse_excel_format_string|/parse_excel_format_string( $string, $name )>  and 
-L<get_defined_conversion|/get_defined_conversion( $position )>. See the L<documentation 
-for the format interface to integrate it in the package formatter
-|Spreadsheet::Reader::Format::FormatInterface>.
-
-For an explanation of functionality for a fully built Formatter class see the 
-documentation for L<Spreadsheet::Reader::Format::FormatInterface>.  This 
-will include the class L<Spreadsheet::Reader::Format::FmtDefault>.
+L<get_defined_conversion|/get_defined_conversion( $position )>. See the L<documentation
+|Spreadsheet::Reader::Format::FormatInterface> for the format interface to integrate into 
+the package.
 
 =head2 Caveat Utilitor
 
@@ -1903,14 +1926,14 @@ string.  If that does not resolve satisfactorily it then calculates -all- over/u
 numerators with decreasing denominators from the maximum denominator (based on the 
 format string) all the way to the denominator of 2 and takes the most accurate result.  
 There is no early-out available in this computation so if you reach this point for multi 
-digit denominators it is computationally intensive.  (Not that continued fractions are 
+digit denominators things slow down.  (Not that continued fractions are 
 computationally so cheap.)  However, dual staging the calculation this way yields either 
 the same result as Excel or a more accurate result while providing a possible early out 
 in the continued fraction portion.  I was unable to even come close to Excel output 
 otherwise.  If you have a faster conversion or just want to opt out for specific cells 
 without replacing this whole parser then use the worksheet method 
-L<Spreadsheet::Reader::Format::Worksheet/set_custom_formats( $key =E<gt> $format_object_or_string )>.  
-$format_object_or_string = '@' is a pass through.
+L<Spreadsheet::Reader::ExcelXML::Worksheet/set_custom_formats( $key =E<gt> $format_object_or_string )>.  
+I<hint: $format_object_or_string = '@' will set a pass through.>
 
 =head2 requires
 
@@ -1931,8 +1954,7 @@ See L<Spreadsheet::Reader::Format::FmtDefault/defined_excel_translations>
 
 These are the methods provided by this role to whatever class or instance inherits this 
 role.  For additional ParseExcelFormatStrings options see the L<Attributes|/Attributes> 
-section.  See the documentation for L<Spreadsheet::Reader::Format/format_inst> to 
-see which methods are delegated all the way to the workbook level.
+section.
 
 =head3 parse_excel_format_string( $string, $name )
 
@@ -1983,22 +2005,20 @@ from the formatting string
 
 Data passed to new when creating a class or instance containing this role.   For 
 modification of these attributes see the listed 'attribute methods'.  For more 
-information on attributes see L<Moose::Manual::Attributes>.  See the documentation 
-for L<Spreadsheet::Reader::Format/format_inst> to see which attribute methods 
-are delegated all the way to the workbook level.
+information on attributes see L<Moose::Manual::Attributes>.
 		
 =head3 workbook_inst
 
 =over
 
-B<Definition:> This role needs visibility to several attributes held at the 
-workbook level.  This instance is a way for this role to see those settings.
+B<Definition:> This role works better if it has access to two workbook methods 
+there are defaults built in if the workbook is not connected but the package no 
+longer responds dynamically when that connection is broken.  This instance is a 
+way for this role to see those settings.
 
-B<Required:> Since the only way this package is used is when it is installed 
-in the workbook object as an instance the workbook itself will add this instance 
-when it recieves the formatter instance.
+B<Required:> No but it's really nice
 
-B<Range:> an instance of the L<Spreadsheet::Reader::Format> class
+B<Range:> an instance of the L<Spreadsheet::Reader::ExcelXML> class
 
 B<attribute methods> Methods provided to adjust this attribute
 		
@@ -2020,13 +2040,9 @@ B<delegated methods> Methods provided from the object stored in the attribute
 		
 =over
 
-B<error> => L<Spreadsheet::Reader::Format/error>
+B<set_error( $error_string )> => L<Spreadsheet::Reader::ExcelXML/set_error>
 
-B<set_error( $error_string )> => L<Spreadsheet::Reader::Format/set_error>
-
-B<clear_error> => L<Spreadsheet::Reader::Format/clear_error>
-
-B<get_epoch_year> => L<Spreadsheet::Reader::Format/get_epoch_year>
+B<get_epoch_year> => L<Spreadsheet::Reader::ExcelXML/get_epoch_year>
 
 =back
 
@@ -2038,9 +2054,11 @@ B<get_epoch_year> => L<Spreadsheet::Reader::Format/get_epoch_year>
 
 B<Definition:> In order to save re-building the coercion each time they are 
 requested, the built coercions can be cached with the format string as the key.  
-This attribute sets whether caching is turned on or not.
+This attribute sets whether caching is turned on or not.  In rare cases with 
+lots of unique formats this would allow a reduction in RAM consumtion at the 
+price of speed.
 
-B<Rang:> Boolean
+B<Range:> Boolean
 
 B<Default:> 1 = caching is on
 
@@ -2056,7 +2074,7 @@ B<Definition:> returns the state of the attribute
 
 =back
 
-B<set_cache_behavior( $Bool )>
+B<set_cache_behavior( $bool )>
 
 =over
 
@@ -2080,7 +2098,7 @@ formatted date data. This attribute sets whether data coersions are built to do
 the full conversion or just to a DateTime object in return.
 
 B<Default:> 0 = unformatted values are coerced completely to date strings (1 = 
-stop at DateTime)
+stop at DateTime objects)
 
 B<attribute methods> Methods provided to adjust this attribute.
 		
@@ -2098,7 +2116,7 @@ B<Definition:> returns the value of the attribute
 		
 =over
 
-B<set_date_behavior( $Bool )>
+B<set_date_behavior( $bool )>
 
 =over
 
@@ -2119,10 +2137,11 @@ B<Delegated to the workbook class:> yes
 
 =over
 
-B<Definition:> This is a way to check for DD-MM-YY formatting of string 
-dates prior to checking for MM-DD-YY.  Since this checks both ways the 
-goal is to catch ambiguous data where the substring for DD < 13 and 
-assign it correctly.
+B<Definition:> This is a way to check for DD-MM-YY formatting of 
+inbound (read from the file) date stringsprior to checking for MM-DD-YY.  
+Since the package always checks both ways when the number is ambiguous 
+the goal is to catch data where the substring for DD < 13 and assign it 
+correctly.
 
 B<Default:> 0 = MM-DD-YY[YY] is tested first
 
@@ -2138,7 +2157,7 @@ B<Definition:> returns the value of the attribute
 
 =back
 
-B<set_european_first( $Bool )>
+B<set_european_first( $bool )>
 
 =over
 
@@ -2157,7 +2176,7 @@ B<Range:> Boolean 0 = MM-DD-YY is tested first, 1 = DD-MM-YY is tested first
 =over
 
 L<github Spreadsheet::Reader::Format/issues
-|https://github.com/jandrew/Spreadsheet-XLSX-Reader-LibXML/issues>
+|https://github.com/jandrew/p5-spreadsheet-reader-format/issues>
 
 =back
 
@@ -2187,45 +2206,13 @@ it and/or modify it under the same terms as Perl itself.
 The full text of the license can be found in the
 LICENSE file included with this module.
 
-This software is copyrighted (c) 2014, 2015 by Jed Lund
+This software is copyrighted (c) 2016 by Jed Lund
 
 =head1 DEPENDENCIES
 
 =over
 
-L<perl 5.010|perl/5.10.0>
-
-L<version> 0.77
-
-L<Carp> - confess
-
-L<Type::Tiny> - 1.000
-
-L<DateTimeX::Format::Excel> - 0.012
-
-L<DateTime::Format::Flexible>
-
-L<Clone> - clone
-
-L<Spreadsheet::Reader::Format::Types>
-
-L<Moose::Role>
-
-=over
-
-B<requires;>
-
-=over
-
-get_excel_region
-
-set_error
-
-get_defined_excel_format
-
-=back
-
-=back
+L<Spreadsheet::Reader::Format>
 
 =back
 
