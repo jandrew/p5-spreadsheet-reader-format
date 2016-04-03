@@ -1,5 +1,5 @@
 package Spreadsheet::Reader::Format;
-use version  0.77; our $VERSION = version->declare('v0.2.0');
+use version  0.77; our $VERSION = version->declare('v0.2.2');
 ###LogSD	warn "You uncovered internal logging statements for Spreadsheet::Reader::Format-$VERSION";
 
 use 5.010;
@@ -60,8 +60,8 @@ Spreadsheet::Reader::Format - Formatting for various spreadsheet readers
 	<img src='https://coveralls.io/repos/jandrew/Spreadsheet-Reader-Format/badge.svg?branch=master' alt='Coverage Status' />
 </a>
 
-<a href='https://github.com/jandrew/Spreadsheet-Reader-Format'>
-	<img src="https://img.shields.io/github/tag/jandrew/Spreadsheet-Reader-Format.svg?label=github version" alt="github version"/>
+<a href='https://github.com/jandrew/p5-spreadsheet-reader-format'>
+	<img src="https://img.shields.io/github/tag/jandrew/p5-spreadsheet-reader-format.svg?label=github version" alt="github version"/>
 </a>
 
 <a href="https://metacpan.org/pod/Spreadsheet::Reader::Format">
