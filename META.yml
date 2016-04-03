@@ -11,7 +11,7 @@ license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
   version: '1.4'
-name: p5-spreadsheet-reader-format
+name: Spreadsheet-Reader-Format
 provides:
   Spreadsheet::Reader::Format:
     file: lib/Spreadsheet/Reader/Format.pm
