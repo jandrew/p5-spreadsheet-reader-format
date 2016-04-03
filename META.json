@@ -56,22 +56,22 @@
    "provides" : {
       "Spreadsheet::Reader::Format" : {
          "file" : "lib/Spreadsheet/Reader/Format.pm",
-         "version" : "v0.13.0"
+         "version" : "v0.2.0"
       },
       "Spreadsheet::Reader::Format::FmtDefault" : {
          "file" : "lib/Spreadsheet/Reader/Format/FmtDefault.pm",
-         "version" : "v0.13.0"
+         "version" : "v0.2.0"
       },
       "Spreadsheet::Reader::Format::ParseExcelFormatStrings" : {
          "file" : "lib/Spreadsheet/Reader/Format/ParseExcelFormatStrings.pm",
-         "version" : "v0.13.0"
+         "version" : "v0.2.0"
       },
       "Spreadsheet::Reader::Format::Types" : {
          "file" : "lib/Spreadsheet/Reader/Format/Types.pm",
-         "version" : "v0.13.0"
+         "version" : "v0.2.0"
       }
    },
-   "release_status" : "testing",
+   "release_status" : "stable",
    "resources" : {
       "bugtracker" : {
          "web" : "https://github.com/jandrew/p5-spreadsheet-reader-format/issues"
@@ -83,7 +83,7 @@
          "web" : "https://github.com/jandrew/p5-spreadsheet-reader-format"
       }
    },
-   "version" : "v0.1_3",
+   "version" : "v0.2.0",
    "x_authority" : "cpan:JANDREW"
 }
 

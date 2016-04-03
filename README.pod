@@ -4,6 +4,34 @@
 
 Spreadsheet::Reader::Format - Formatting for various spreadsheet readers
 
+=begin html
+
+<a href="https://www.perl.org">
+	<img src="https://img.shields.io/badge/perl-5.10+-brightgreen.svg" alt="perl version">
+</a>
+
+<a href="https://travis-ci.org/jandrew/Spreadsheet-Reader-Format">
+	<img alt="Build Status" src="https://travis-ci.org/jandrew/Spreadsheet-Reader-Format.png?branch=master" alt='Travis Build'/>
+</a>
+
+<a href='https://coveralls.io/r/jandrew/Spreadsheet-Reader-Format?branch=master'>
+	<img src='https://coveralls.io/repos/jandrew/Spreadsheet-Reader-Format/badge.svg?branch=master' alt='Coverage Status' />
+</a>
+
+<a href='https://github.com/jandrew/Spreadsheet-Reader-Format'>
+	<img src="https://img.shields.io/github/tag/jandrew/Spreadsheet-Reader-Format.svg?label=github version" alt="github version"/>
+</a>
+
+<a href="https://metacpan.org/pod/Spreadsheet::Reader::Format">
+	<img src="https://badge.fury.io/pl/Spreadsheet-Reader-Format.svg?label=cpan version" alt="CPAN version" height="20">
+</a>
+
+<a href='http://cpants.cpanauthors.org/dist/Spreadsheet-Reader-Format'>
+	<img src='http://cpants.cpanauthors.org/dist/Spreadsheet-Reader-Format.png' alt='kwalitee' height="20"/>
+</a>
+
+=end html
+
 =head1 SYNOPSYS
 
 	#!/usr/bin/env perl
@@ -305,5 +333,13 @@ All lines in this package that use Log::Shiras are commented out
 =back
 
 =back
+
+=begin html
+
+<a href="http://www.perlmonks.org/?node_id=706986">
+	<img src="http://www.perlmonksflair.com/jandrew.jpg" alt="perl monks">
+</a>
+
+=end html
 
 =cut
