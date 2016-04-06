@@ -45,7 +45,7 @@ Spreadsheet::Reader::Format - Formatting for various spreadsheet readers
 		# The base United State localization settings - Inject your customized format class here
 		superclasses => [ 'Spreadsheet::Reader::Format::FmtDefault' ],
 		# ParseExcelFormatStrings => The Excel string parser generation engine
-		# FormatInterface => The top level interface defining minimum compatability requirements
+		# Format => The top level interface defining minimum compatability requirements
 		add_roles_in_sequence =>[qw(
 			Spreadsheet::Reader::Format::ParseExcelFormatStrings
 			Spreadsheet::Reader::Format

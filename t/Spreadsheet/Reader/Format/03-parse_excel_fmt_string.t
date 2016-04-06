@@ -56,7 +56,7 @@ use	Spreadsheet::Reader::Format::FmtDefault;
 ###LogSD	use Log::Shiras::UnhideDebug;
 use	Spreadsheet::Reader::Format::ParseExcelFormatStrings;
 my  ( 
-			$test_instance, $capture, $x, @answer, $coercion,
+			$test_instance, $capture, $x, @answer, $coercion, $workbook_instance,
 	);
 my 			$row = 0;
 my 			@class_attributes = qw(
@@ -209,6 +209,13 @@ my			$answer_list =[
 			];
 ###LogSD		$phone->talk( level => 'info', message => [ "easy questions ..." ] );
 lives_ok{
+			$workbook_instance = build_instance(
+									package => 'Spreadsheet::Reader::ExcelXML::Workbook',
+									add_methods =>{
+										get_epoch_year => sub{ 1904 },
+										set_error => sub{ warn $_[0] },
+									},
+								);
 			$test_instance	=	build_instance(
 									package	=> 'ParseExcelFormatStringsTest',
 									superclasses =>[
@@ -217,7 +224,7 @@ lives_ok{
 									add_roles_in_sequence =>[
 										'Spreadsheet::Reader::Format::ParseExcelFormatStrings'
 									],
-									_alt_epoch_year => 1904, #Not standard - mostly used for simplified testing
+									workbook_inst => $workbook_instance,
 ###LogSD							log_space	=> 'Test',
 								);
 }										"Prep a test ParseExcelFormatStrings instance";

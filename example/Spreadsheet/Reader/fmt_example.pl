@@ -12,8 +12,8 @@ my $formatter = build_instance(
 	package => 'FormatInstance',
 	# The base United State localization settings - Inject your customized format class here
 	superclasses => [ 'Spreadsheet::Reader::Format::FmtDefault' ],
-	# ParseExcelFormatStrings => The Excel string parser generation engine
-	# FormatInterface => The top level interface defining minimum compatability requirements
+	# ~ParseExcelFormatStrings => The Excel string parser generation engine
+	# ~Format => The top level interface defining minimum compatability requirements
 	add_roles_in_sequence =>[qw(
 		Spreadsheet::Reader::Format::ParseExcelFormatStrings
 		Spreadsheet::Reader::Format
@@ -35,6 +35,6 @@ print $coercion->assert_coerce( $time ) . "\n";
 # Set specific default custom formats here (for use in an excel parser)
 $formatter->set_defined_excel_formats( 0x2C => 'MyCoolFormatHere' );
 
-#~ # Use the formatter like Spreadsheet::ParseExcel
-#~ my $parser	= Spreadsheet::Reader::ExcelXML->new;
+# Use the formatter like Spreadsheet::ParseExcel
+my $parser	= Spreadsheet::Reader::ExcelXML->new;
 my $workbook = $parser->parse( '../t/test_files/TestBook.xlsx', $formatter );

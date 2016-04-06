@@ -1,5 +1,5 @@
 package Spreadsheet::Reader::Format::ParseExcelFormatStrings;
-use version; our $VERSION = version->declare('v0.2.6');
+use version; our $VERSION = version->declare('v0.2.8');
 ###LogSD	warn "You uncovered internal logging statements for Spreadsheet::Reader::Format::ParseExcelFormatStrings-$VERSION";
 
 use 5.010;
@@ -91,7 +91,7 @@ my	$number_build_dispatch ={
 #########1 Public Attributes  3#########4#########5#########6#########7#########8#########9
 
 has workbook_inst =>(
-		isa	=> 'Spreadsheet::Reader::Format::Workbook', 
+		isa	=> 'Spreadsheet::Reader::ExcelXML::Workbook', 
 		handles =>[ qw( set_error get_epoch_year )],
 		writer	=> 'set_workbook_inst',
 		predicate => '_has_workbook_inst',
@@ -1856,7 +1856,6 @@ Spreadsheet::Reader::Format::ParseExcelFormatStrings - Convert Excel format stri
 		
 	use lib '../../../../lib';
 	extends	'Spreadsheet::Reader::Format::FmtDefault';
-	# call 'with' a second time to ensure that the prior methods are recorded
 	with	'Spreadsheet::Reader::Format::ParseExcelFormatStrings';
 
 	package main;

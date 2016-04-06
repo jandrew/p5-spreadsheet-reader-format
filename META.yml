@@ -21,16 +21,16 @@ name: Spreadsheet-Reader-Format
 provides:
   Spreadsheet::Reader::Format:
     file: lib/Spreadsheet/Reader/Format.pm
-    version: v0.2.6
+    version: v0.2.8
   Spreadsheet::Reader::Format::FmtDefault:
     file: lib/Spreadsheet/Reader/Format/FmtDefault.pm
-    version: v0.2.6
+    version: v0.2.8
   Spreadsheet::Reader::Format::ParseExcelFormatStrings:
     file: lib/Spreadsheet/Reader/Format/ParseExcelFormatStrings.pm
-    version: v0.2.6
+    version: v0.2.8
   Spreadsheet::Reader::Format::Types:
     file: lib/Spreadsheet/Reader/Format/Types.pm
-    version: v0.2.6
+    version: v0.2.8
 requires:
   Carp: '0'
   Clone: '0'
@@ -55,5 +55,5 @@ resources:
   bugtracker: https://github.com/jandrew/p5-spreadsheet-reader-format/issues
   homepage: https://github.com/jandrew/p5-spreadsheet-reader-format
   repository: https://github.com/jandrew/p5-spreadsheet-reader-format.git
-version: v0.2.6
+version: v0.2.8
 x_authority: cpan:JANDREW

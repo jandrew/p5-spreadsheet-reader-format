@@ -12,7 +12,8 @@ to the 1.0 release.
 
 {{$NEXT}}
 
-	* Another cool change
+	! Workbook instance required the wrong class - fixed and added a test
+	! Fixed the SYNOPSIS callout for 'FormatInterface' (->Format)
 
 v0.2.6    2016-04-02 21:45:26-07:00 America/Los_Angeles
 

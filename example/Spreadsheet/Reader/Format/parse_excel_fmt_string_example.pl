@@ -4,7 +4,6 @@ use Moose;
 	
 use lib '../../../../lib';
 extends	'Spreadsheet::Reader::Format::FmtDefault';
-# call 'with' a second time to ensure that the prior methods are recorded
 with	'Spreadsheet::Reader::Format::ParseExcelFormatStrings';
 
 package main;

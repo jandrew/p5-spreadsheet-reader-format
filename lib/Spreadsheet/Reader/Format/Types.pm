@@ -1,5 +1,5 @@
 package Spreadsheet::Reader::Format::Types;
-use version; our $VERSION = version->declare('v0.2.6');
+use version; our $VERSION = version->declare('v0.2.8');
 ###LogSD	warn "You uncovered internal logging statements for Spreadsheet::Reader::Format::Types-$VERSION";
 		
 use strict;

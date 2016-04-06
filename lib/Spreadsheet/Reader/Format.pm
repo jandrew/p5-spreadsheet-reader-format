@@ -1,5 +1,5 @@
 package Spreadsheet::Reader::Format;
-use version  0.77; our $VERSION = version->declare('v0.2.6');
+use version  0.77; our $VERSION = version->declare('v0.2.8');
 ###LogSD	warn "You uncovered internal logging statements for Spreadsheet::Reader::Format-$VERSION";
 
 use 5.010;
@@ -87,7 +87,7 @@ Spreadsheet::Reader::Format - Formatting for various spreadsheet readers
 		# The base United State localization settings - Inject your customized format class here
 		superclasses => [ 'Spreadsheet::Reader::Format::FmtDefault' ],
 		# ParseExcelFormatStrings => The Excel string parser generation engine
-		# FormatInterface => The top level interface defining minimum compatability requirements
+		# Format => The top level interface defining minimum compatability requirements
 		add_roles_in_sequence =>[qw(
 			Spreadsheet::Reader::Format::ParseExcelFormatStrings
 			Spreadsheet::Reader::Format
