@@ -42,11 +42,12 @@ my %WriteMakefileArgs = (
     "Capture::Tiny" => 0,
     "Data::Dumper" => 0,
     "MooseX::ShortCut::BuildInstance" => "v1.8.0",
+    "Test::Exception" => "0.43",
     "Test::Moose" => 0,
     "Test::Most" => 0,
     "Test::TypeTiny" => 0
   },
-  "VERSION" => "v0.2.8",
+  "VERSION" => "v0.2.10",
   "test" => {
     "TESTS" => "t/Spreadsheet/Reader/*.t t/Spreadsheet/Reader/Format/*.t"
   }
@@ -65,6 +66,7 @@ my %FallbackPrereqs = (
   "Moose" => 0,
   "Moose::Role" => 0,
   "MooseX::ShortCut::BuildInstance" => "1.8.0",
+  "Test::Exception" => "0.43",
   "Test::Moose" => 0,
   "Test::Most" => 0,
   "Test::TypeTiny" => 0,
