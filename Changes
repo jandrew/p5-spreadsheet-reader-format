@@ -12,7 +12,7 @@ to the 1.0 release.
 
 {{$NEXT}}
 
-	* Another cool change
+	! Updated the version requirement for DateTimeX::Format::Excel
 
 v0.4.0    2016-05-14 20:44:52-07:00 America/Los_Angeles
 

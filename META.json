@@ -25,7 +25,7 @@
             "Clone" : "0",
             "DateTime" : "0",
             "DateTime::Format::Flexible" : "0",
-            "DateTimeX::Format::Excel" : "0.012",
+            "DateTimeX::Format::Excel" : "0.014",
             "Encode" : "0",
             "IO::File" : "0",
             "Moose" : "0",
@@ -58,19 +58,19 @@
    "provides" : {
       "Spreadsheet::Reader::Format" : {
          "file" : "lib/Spreadsheet/Reader/Format.pm",
-         "version" : "v0.4.0"
+         "version" : "v0.6.0"
       },
       "Spreadsheet::Reader::Format::FmtDefault" : {
          "file" : "lib/Spreadsheet/Reader/Format/FmtDefault.pm",
-         "version" : "v0.4.0"
+         "version" : "v0.6.0"
       },
       "Spreadsheet::Reader::Format::ParseExcelFormatStrings" : {
          "file" : "lib/Spreadsheet/Reader/Format/ParseExcelFormatStrings.pm",
-         "version" : "v0.4.0"
+         "version" : "v0.6.0"
       },
       "Spreadsheet::Reader::Format::Types" : {
          "file" : "lib/Spreadsheet/Reader/Format/Types.pm",
-         "version" : "v0.4.0"
+         "version" : "v0.6.0"
       }
    },
    "release_status" : "stable",
@@ -85,7 +85,7 @@
          "web" : "https://github.com/jandrew/p5-spreadsheet-reader-format"
       }
    },
-   "version" : "v0.4.0",
+   "version" : "v0.6.0",
    "x_authority" : "cpan:JANDREW"
 }
 

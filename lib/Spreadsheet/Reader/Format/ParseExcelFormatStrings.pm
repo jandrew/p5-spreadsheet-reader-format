@@ -1,5 +1,5 @@
 package Spreadsheet::Reader::Format::ParseExcelFormatStrings;
-use version; our $VERSION = version->declare('v0.4.0');
+use version; our $VERSION = version->declare('v0.6.0');
 ###LogSD	warn "You uncovered internal logging statements for Spreadsheet::Reader::Format::ParseExcelFormatStrings-$VERSION";
 
 use 5.010;
@@ -17,7 +17,7 @@ use Types::Standard qw(
 use Carp qw( confess longmess );
 use	Type::Coercion;
 use	Type::Tiny;
-use DateTimeX::Format::Excel 0.012;
+use DateTimeX::Format::Excel 0.014;
 use DateTime::Format::Flexible;
 use DateTime;
 use Clone 'clone';
@@ -91,26 +91,26 @@ my	$number_build_dispatch ={
 #########1 Public Attributes  3#########4#########5#########6#########7#########8#########9
 
 has workbook_inst =>(
-		isa	=> 'Spreadsheet::Reader::ExcelXML::Workbook', 
+		isa	=> 'Spreadsheet::Reader::ExcelXML::Workbook',
 		handles =>[ qw( set_error get_epoch_year )],
 		writer	=> 'set_workbook_inst',
 		predicate => '_has_workbook_inst',
 	);
-	
+
 has	cache_formats =>(
 		isa		=> Bool,
 		reader	=> 'get_cache_behavior',
 		writer	=> 'set_cache_behavior',
 		default	=> 1,
 	);
-	
+
 has	datetime_dates =>(
 		isa		=> Bool,
 		reader	=> 'get_date_behavior',
 		writer	=> 'set_date_behavior',
 		default	=> 0,
 	);
-	
+
 has	european_first =>(
 		isa		=> Bool,
 		reader	=> 'get_european_first',
@@ -138,14 +138,14 @@ sub get_defined_conversion{#  Add a test for this function in 08-parse...
 		$self->set_error( "Unparsable conversion string at position -$position- found: $coercion_string" );
 		return undef;
 	}
-	###LogSD	my $level = 
-	#~ ###LogSD		$position == 164 ? 'fatal' : 
+	###LogSD	my $level =
+	#~ ###LogSD		$position == 164 ? 'fatal' :
 	###LogSD				'trace';
 	###LogSD	$phone->talk( level => $level, message => [
 	###LogSD		'Returning coercion:', $coercion,] );
 	return $coercion;
 }
- 
+
 sub parse_excel_format_string{
 	my( $self, $format_strings, $coercion_name ) = @_;
 	###LogSD	my	$phone = Log::Shiras::Telephone->new( name_space =>
@@ -165,7 +165,7 @@ sub parse_excel_format_string{
 	if( $self->get_cache_behavior ){
 		###LogSD	$phone->talk( level => 'debug', message => [
 		###LogSD		"checking stored cache of the key: $format_strings",
-		###LogSD		'..searching in stored keys:', keys %{$self->_get_all_format_cache} ] ); 
+		###LogSD		'..searching in stored keys:', keys %{$self->_get_all_format_cache} ] );
 		$cache_key	= $format_strings; # TODO fix the non-hashkey character issues;
 		if( $self->_has_cached_format( $cache_key ) ){
 			###LogSD		$phone->talk( level => 'debug', message => [
@@ -176,7 +176,7 @@ sub parse_excel_format_string{
 			###LogSD		"Building new format for key: $cache_key", ] );
 		}
 	}
-	
+
 	# Split into the four sections positive, negative, zero, and text
 		$format_strings =~ s/General/\@/ig;# Change General to text input
 	my	@format_string_list = split /;/, $format_strings;
@@ -211,7 +211,7 @@ sub parse_excel_format_string{
 		$format_string =~ s/\*//g;# Remove the repeat character listing (not supported here)
 		###LogSD	$phone->talk( level => 'debug', message => [
 		###LogSD		"Building format for: $format_string", ] );
-		
+
 		# Pull out all the straight through stuff
 		my	@deconstructed_list;
 		my	$x = 0;
@@ -350,7 +350,7 @@ sub parse_excel_format_string{
 			###LogSD		"Updated deconstructed list:", @deconstructed_list, ] );
 		}
 		$last_deconstructed_list = clone( [@deconstructed_list] );
-		
+
 		###LogSD	$phone->talk( level => 'debug', message => [
 		###LogSD		"Running method -$method- for list:", @deconstructed_list ] );
 		my( $intermediate_action, @intermediate_coercions ) = $self->$method( $filter, \@deconstructed_list, $format_string );
@@ -370,9 +370,9 @@ sub parse_excel_format_string{
 	###LogSD		"Action type: $action_type", "Conversion type: $conversion_type", ] );
 	###LogSD	$phone->talk( level => 'trace', message => [
 	###LogSD		($coercion_name ? "Initial coercion name: $coercion_name" : ''), ] );
-	
+
 	# Build the final format
-	#~ $conversion_type = 'text' if $action_type eq 'TEXT'; 
+	#~ $conversion_type = 'text' if $action_type eq 'TEXT';
 	$coercion_name =~ s/__/_${conversion_type}_/ if $coercion_name;
 	###LogSD	$phone->talk( level => 'info', message => [ "Action type: $action_type" ] );
 	my	%args = (
@@ -386,20 +386,20 @@ sub parse_excel_format_string{
 	my	$final_type = Type::Tiny->new( %args );
 	###LogSD	$phone->talk( level => 'trace', message => [
 	###LogSD		"Final type:", $final_type ] );
-	
+
 	# Save the cache
 	if( $self->get_cache_behavior ){
 		###LogSD	$phone->talk( level => 'debug', message => [
 		###LogSD		"setting cache for key:", $cache_key ] );
 		$self->_set_cashed_format( $cache_key => $final_type );
 	}
-	
+
 	return $final_type;
 }
-	
+
 
 #########1 Private Attributes 3#########4#########5#########6#########7#########8#########9
-	
+
 has	_format_cash =>(
 		isa		=> HashRef,
 		traits	=> ['Hash'],
@@ -411,7 +411,7 @@ has	_format_cash =>(
 		},
 		default	=> sub{ {} },
 	);
-	
+
 has	_alt_epoch_year =>(
 		isa		=> Int,
 		reader	=> '_get_alt_epoch_year',
@@ -476,7 +476,7 @@ sub _build_date{
 	###LogSD			$self->get_all_space . '::hidden::_build_date', );
 	###LogSD		$phone->talk( level => 'debug', message => [
 	###LogSD			"Building an anonymous sub to process date values", $list_ref ] );
-	
+
 	my	$build_ref;#
 	@$build_ref{qw( is_duration sub_seconds )} = ( 0, 0 );
 	# Process once to build the cldr string and other flags
@@ -488,7 +488,7 @@ sub _build_date{
 	my	$converter = DateTimeX::Format::Excel->new( @args_list );
 	###LogSD	$phone->talk( level => 'debug', message => [
 	###LogSD		"Building sub with:", @args_list, "And get_date_behavior set to: " . $self->get_date_behavior	] );
-	my	$conversion_sub = sub{ 
+	my	$conversion_sub = sub{
 			my	$num = $_[0];
 			if( !defined $num ){
 				return undef;
@@ -557,7 +557,7 @@ sub _build_datestring{
 	###LogSD			$self->get_all_space . '::hidden::_build_datestring', );
 	###LogSD		$phone->talk( level => 'debug', message => [
 	###LogSD			"Building an anonymous sub to process date strings", $list_ref, ] );
-	
+
 	my	$build_ref;#
 	@$build_ref{qw( is_duration sub_seconds )} = ( 0, 0 );
 	# Process once to build the cldr string and other flags
@@ -565,7 +565,7 @@ sub _build_datestring{
 	my	$clone_ref = clone( $build_ref );
 	###LogSD		$phone->talk( level => 'debug', message => [
 	###LogSD			"Conversion sub will use ref: ", $clone_ref ] );
-	my	$conversion_sub = sub{ 
+	my	$conversion_sub = sub{
 			my	$date = $_[0];
 			if( !$date ){
 				return undef;
@@ -689,7 +689,7 @@ sub _build_date_cldr{
 	###LogSD			$self->get_all_space . '::hidden::_build_date_cldr', );
 	###LogSD		$phone->talk( level => 'debug', message => [
 	###LogSD			"transforming an excel format string to the cldr equivalent", $list_ref ] );
-	
+
 	my ( $cldr_string, $format_remainder );
 	my	$is_duration = 0;
 	my	$sub_seconds = 0;
@@ -715,7 +715,7 @@ sub _build_date_cldr{
 					###LogSD		"with prior duration: $prior_duration"		] );
 				}else{
 					confess "Bad duration element found: $is_duration->[0]";
-				} 
+				}
 			}elsif( ref( $is_duration ) eq 'ARRAY' ){
 				###LogSD	$phone->talk( level => 'debug', message =>[ "adding to duration", $piece ] );
 				my	$next_duration = $duration_order->{$prior_duration};
@@ -742,7 +742,7 @@ sub _build_date_cldr{
 					###LogSD		"with prior duration: $prior_duration"	 ] );
 				}else{
 					confess "Bad duration element found: $piece->[0]";
-				} 
+				}
 			}elsif( $piece->[0] =~ /m/ ){
 				###LogSD	$phone->talk( level => 'debug', message =>[ "Minutes or Months" ] );
 				if( ($cldr_string and $cldr_string =~ /:'?$/) or ($piece->[1] and $piece->[1] eq ':') ){
@@ -872,7 +872,7 @@ sub _build_number{
 	###LogSD			'With type constraint: ' . $type_filter->name,
 	###LogSD			'..using list ref:' , $list_ref 			] );
 	my ( $code_hash_ref, $number_type, );
-	
+
 	# Resolve zero replacements quickly
 	if(	$type_filter->name eq 'ZeroOrUndef' and
 		!$list_ref->[-1]->[0] and $list_ref->[-1]->[1] eq '"-"' ){
@@ -885,14 +885,14 @@ sub _build_number{
 		$return_string =~ s/"\-"/\-/;
 		return( 'NUMBER', $type_filter, sub{ $return_string } );
 	}
-	
+
 	# Handle trailing negative
 	if( $list_ref->[-1]->[0] =~ /(.*[\d\#])\-$/ ){
 		###LogSD	$phone->talk( level => 'debug', message =>[ "Found a trailing negative sign", ] );
 		$list_ref->[-1]->[0] = $1;
 		push @$list_ref, [ undef, '-' ];
 	}
-	
+
 	# Process once to determine what to do
 	for my $piece ( @$list_ref ){
 		###LogSD	$phone->talk( level => 'debug', message => [
@@ -972,20 +972,20 @@ sub _build_number{
 			}
 		}
 	}
-	
+
 	# Set negative type
 	if( $type_filter->name eq 'NegativeNum' ){
 		###LogSD	$phone->talk( level => 'info', message => [
 		###LogSD		"Setting this as a negative number type" ] );
 		$code_hash_ref->{negative_type} = 1;
 	}
-	
+
 	my $method = '_build_' . lc( $number_type ) . '_sub';
 	###LogSD	$phone->talk( level => 'trace', message => [
 	###LogSD		"Resolved the number type to: $number_type",
 	###LogSD		'Working with settings:', $list_ref, $code_hash_ref ] );
 	my $conversion_sub = $self->$method( $type_filter, $list_ref, $code_hash_ref );
-		
+
 	return( $number_type, $type_filter, $conversion_sub );
 }
 
@@ -997,7 +997,7 @@ sub _build_integer_sub{
 	###LogSD			"Building an anonymous sub to return integer values",
 	###LogSD			'With type constraint: ' . $type_filter->name,
 	###LogSD			'..using list ref:' , $list_ref, '..and conversion defs:', $conversion_defs	] );
-	
+
 	my $sprintf_string;
 	# Process once to determine what to do
 	my $found_integer = 0;
@@ -1017,7 +1017,7 @@ sub _build_integer_sub{
 	###LogSD	$phone->talk( level => 'debug', message => [
 	###LogSD		"Final sprintf string: $sprintf_string" ] );
 	my $dispatch_sequence = $number_build_dispatch->{decimal};
-	
+
 	my 	$conversion_sub = sub{
 			#~ print "Using Integer sub!!!!!!\n";
 			###LogSD	my $sub_phone = Log::Shiras::Telephone->new( name_space =>
@@ -1045,7 +1045,7 @@ sub _build_integer_sub{
 		};
 	###LogSD	$phone->talk( level => 'debug', message => [
 	###LogSD		"Conversion sub for filter name: " . $type_filter->name, $conversion_sub ] );
-	
+
 	return $conversion_sub;
 }
 
@@ -1057,7 +1057,7 @@ sub _build_decimal_sub{
 	###LogSD			"Building an anonymous sub to return decimal values",
 	###LogSD			'With type constraint: ' . $type_filter->name,
 	###LogSD			'..using list ref:' , $list_ref, '..and code hash ref:', $conversion_defs ] );
-	
+
 	my $sprintf_string;
 	# Process once to determine what to do
 	for my $piece ( @$list_ref ){
@@ -1078,7 +1078,7 @@ sub _build_decimal_sub{
 	###LogSD	$phone->talk( level => 'debug', message => [
 	###LogSD		"Final sprintf string: $sprintf_string" ] );
 	my $dispatch_sequence = $number_build_dispatch->{decimal};
-	
+
 	my 	$conversion_sub = sub{
 			#~ print "Using Decimal sub!!!!!!\n";
 			###LogSD	my $sub_phone = Log::Shiras::Telephone->new( name_space =>
@@ -1107,7 +1107,7 @@ sub _build_decimal_sub{
 		};
 	###LogSD	$phone->talk( level => 'debug', message => [
 	###LogSD		"Conversion sub for filter name: " . $type_filter->name, $conversion_sub ] );
-	
+
 	return $conversion_sub;
 }
 
@@ -1119,7 +1119,7 @@ sub _build_percent_sub{
 	###LogSD			"Building an anonymous sub to return decimal values",
 	###LogSD			'With type constraint: ' . $type_filter->name,
 	###LogSD			'..using list ref:' , $list_ref, '..and code hash ref:', $conversion_defs	] );
-	
+
 	my $sprintf_string;
 	my $decimal_count = 0;
 	# Process once to determine what to do
@@ -1145,7 +1145,7 @@ sub _build_percent_sub{
 	###LogSD	$phone->talk( level => 'debug', message => [
 	###LogSD		"Final sprintf string: $sprintf_string" ] );
 	my $dispatch_sequence = $number_build_dispatch->{percent};
-	
+
 	my 	$conversion_sub = sub{
 			#~ print "Using Percent sub!!!!!!\n";
 			###LogSD	my $sub_phone = Log::Shiras::Telephone->new( name_space =>
@@ -1182,7 +1182,7 @@ sub _build_percent_sub{
 		};
 	###LogSD	$phone->talk( level => 'debug', message => [
 	###LogSD		"Conversion sub for filter name: " . $type_filter->name, $conversion_sub ] );
-	
+
 	return $conversion_sub;
 }
 
@@ -1194,7 +1194,7 @@ sub _build_scientific_sub{
 	###LogSD			"Building an anonymous sub to return scientific values",
 	###LogSD			'With type constraint: ' . $type_filter->name,
 	###LogSD			'..using list ref:' , $list_ref, '..and code hash ref:', $conversion_defs	] );
-	
+
 	# Process once to determine what to do
 	my ( $sprintf_string, $exponent_sprintf );
 	$conversion_defs->{no_decimal} = ( exists $conversion_defs->{decimal} ) ? 0 : 1 ;
@@ -1227,7 +1227,7 @@ sub _build_scientific_sub{
 	###LogSD	$phone->talk( level => 'debug', message => [
 	###LogSD		"Final sprintf string: $sprintf_string" ] );
 	my $dispatch_sequence = $number_build_dispatch->{scientific};
-	
+
 	my 	$conversion_sub = sub{
 			my $adjusted_input = $_[0];
 			if( !defined $adjusted_input or $adjusted_input eq '' ){
@@ -1240,7 +1240,7 @@ sub _build_scientific_sub{
 				###LogSD		"Passed the first scientific format test with: $adjusted_input" ] );
 				my	$value_definitions = clone( $conversion_defs );
 					$value_definitions->{initial_value} = $adjusted_input;
-					
+
 				###LogSD	$phone->talk( level => 'trace', message => [
 				###LogSD		'Building scientific output with:',  $conversion_defs,
 				###LogSD		'..and dispatch sequence:', $dispatch_sequence ] );
@@ -1259,7 +1259,7 @@ sub _build_scientific_sub{
 						$built_ref->{sprintf_string},
 						$built_ref->{integer}->{value},
 						$built_ref->{decimal}->{value} ,
-						$built_ref->{exponent}->{value} 
+						$built_ref->{exponent}->{value}
 					);
 				}
 				$return = $built_ref->{sign} . $return if $built_ref->{sign} and $return;
@@ -1272,7 +1272,7 @@ sub _build_scientific_sub{
 		};
 	###LogSD	$phone->talk( level => 'debug', message => [
 	###LogSD		"Conversion sub for filter name: " . $type_filter->name, $conversion_sub ] );
-	
+
 	return $conversion_sub;
 }
 
@@ -1284,9 +1284,9 @@ sub _build_fraction_sub{
 	###LogSD			"Building an anonymous sub to return integer and fraction strings",
 	###LogSD			'With type constraint: ' . $type_filter->name,
 	###LogSD			'..using list ref:' , $list_ref, '..and code hash ref:', $conversion_defs	] );
-	
+
 	# I'm worried about pulling the sprintf parser out of here and I may need to put it back sometime
-	
+
 	my $dispatch_sequence = $number_build_dispatch->{fraction};
 	my $conversion_sub = sub{
 			#~ print "Using Fraction sub!!!!!!\n";
@@ -1324,7 +1324,7 @@ sub _build_fraction_sub{
 		};
 	###LogSD	$phone->talk( level => 'debug', message => [
 	###LogSD		"Conversion sub for filter name: " . $type_filter->name, $conversion_sub ] );
-	
+
 	return $conversion_sub;
 }
 
@@ -1349,7 +1349,7 @@ sub _convert_negative{
 	###LogSD			$self->get_all_space . '::hidden::_build_number::_build_elements::_convert_negative', );
 	###LogSD		$phone->talk( level => 'debug', message => [
 	###LogSD			'Reached _convert_negative with:', $value_definitions,	] );
-	
+
 	if( $value_definitions->{negative_type} and $value_definitions->{initial_value} < 0 ){
 		$value_definitions->{initial_value} = $value_definitions->{initial_value} * -1;
 	}
@@ -1381,7 +1381,7 @@ sub _convert_to_percent{
 	###LogSD			$self->get_all_space . '::hidden::_build_number::_build_elements::_convert_to_percent', );
 	###LogSD		$phone->talk( level => 'debug', message => [
 	###LogSD			'Reached _convert_to_percent with:', $value_definitions,	] );
-	
+
 	$value_definitions->{initial_value} = $value_definitions->{initial_value} * 100;
 	###LogSD		$phone->talk( level => 'debug', message => [
 	###LogSD			'updated value definitions:', $value_definitions,	] );
@@ -1394,16 +1394,16 @@ sub _split_decimal_integer{
 	###LogSD			$self->get_all_space . '::hidden::_build_number::_build_elements::_split_decimal_integer', );
 	###LogSD		$phone->talk( level => 'debug', message => [
 	###LogSD			'Reached _split_decimal_integer with:', $value_definitions,	] );
-	
+
 	# Extract negative sign
 	if( $value_definitions->{initial_value} < 0 ){
 		$value_definitions->{sign} = '-';
 		$value_definitions->{initial_value} = $value_definitions->{initial_value} * -1;
 	}
-	
+
 	# Build the integer
 	$value_definitions->{integer}->{value} = int( $value_definitions->{initial_value} );
-		
+
 	# Build the decimal
 	$value_definitions->{decimal}->{value} = $value_definitions->{initial_value} - $value_definitions->{integer}->{value};
 	###LogSD	$phone->talk( level => 'debug', message =>[ 'Updated ref: ', $value_definitions  ] );
@@ -1417,12 +1417,12 @@ sub _move_decimal_point{
 	###LogSD		$phone->talk( level => 'debug', message => [
 	###LogSD			'Reached _move_decimal_point with:', $value_definitions,	] );
 	my ( $exponent, $stopped );
-	if(defined	$value_definitions->{integer}->{value} and 
+	if(defined	$value_definitions->{integer}->{value} and
 		sprintf( '%.0f', $value_definitions->{integer}->{value} ) =~ /([1-9])/ ){
 		$stopped = $+[0];
 		###LogSD	$phone->talk( level => 'debug', message =>[ "Matched integer value at: $stopped",	] );
 		$exponent = length( sprintf( '%.0f', $value_definitions->{integer}->{value} ) ) - $stopped;
-	}elsif( $value_definitions->{decimal}->{value} ){ 
+	}elsif( $value_definitions->{decimal}->{value} ){
 		if( $value_definitions->{decimal}->{value} =~ /E(-?\d+)$/i ){
 			$exponent = $1 * 1;
 		}elsif( $value_definitions->{decimal}->{value} =~ /([1-9])/ ){
@@ -1460,7 +1460,7 @@ sub _move_decimal_point{
 		$value_definitions->{integer}->{value} = $integer_int;
 		$value_definitions->{decimal}->{value} = $new_decimal + ($new_integer - $integer_int);
 	}
-	
+
 	###LogSD	$phone->talk( level => 'debug', message => [
 	###LogSD		'Updated ref:', $value_definitions		] );
 	return $value_definitions;
@@ -1499,12 +1499,12 @@ sub _round_decimal{
 			my $string_sprintf = '%0' . $value_definitions->{decimal}->{max_length} . 's';
 			$value_definitions->{decimal}->{value} = sprintf( $string_sprintf, ($round_decimal * $decimal_multiply) );
 		}
-		
+
 		if( !$value_definitions->{decimal}->{value} ){
 			$value_definitions->{decimal}->{value} = 0 x $value_definitions->{decimal}->{max_length};
 		}
 	}
-	
+
 	###LogSD	$phone->talk( level => 'debug', message => [
 	###LogSD		'Updated ref:', $value_definitions		] );
 	return $value_definitions;
@@ -1523,7 +1523,7 @@ sub _add_commas{
 			$value_definitions->{integer}->{group_length},
 		);
 	}
-	
+
 	###LogSD	$phone->talk( level => 'debug', message => [
 	###LogSD		'Updated ref:', $value_definitions		] );
 	return $value_definitions;
@@ -1537,7 +1537,7 @@ sub _pad_exponent{
 	###LogSD			'Reached _pad_exponent with:', $value_definitions,	] );
 	if(	$value_definitions->{exponent}->{leading_zeros} ){
 		my $pad_string = '%0' . $value_definitions->{exponent}->{leading_zeros} . 's';
-		$value_definitions->{exponent}->{value} = 
+		$value_definitions->{exponent}->{value} =
 			sprintf( $pad_string, sprintf( '%.0f', $value_definitions->{exponent}->{value} ) );
 	}
 	###LogSD	$phone->talk( level => 'debug', message => [
@@ -1552,7 +1552,7 @@ sub _build_fraction{
 	###LogSD		$phone->talk( level => 'debug', message => [
 	###LogSD			'Reached _build_fraction with:', $value_definitions,	] );
 	if( $value_definitions->{decimal}->{value} ){
-		$value_definitions->{fraction}->{value} = 
+		$value_definitions->{fraction}->{value} =
 			( $value_definitions->{fraction}->{divisor} ) ?
 				$self->_build_divisor_fraction(
 					$value_definitions->{fraction}->{divisor}, $value_definitions->{decimal}->{value}
@@ -1606,7 +1606,7 @@ sub _add_integer_separator{
 	###LogSD	my	$phone = Log::Shiras::Telephone->new( name_space =>
 	###LogSD			$self->get_all_space . '::hidden::_util_function::_add_integer_separator', );
 	###LogSD		$phone->talk( level => 'info', message => [
-	###LogSD			"Attempting to add the separator -$comma- to " . 
+	###LogSD			"Attempting to add the separator -$comma- to " .
 	###LogSD			"the integer portion of: $int" ] );
 		$comma //= ',';
 	my	@number_segments;
@@ -1740,7 +1740,7 @@ sub _integers_to_fraction {# ints_to_frac
 # Takes a numerator and denominator, in scalar context returns
 # the best fraction describing them, in list the numerator and
 # denominator
-sub _best_fraction{#frac_standard 
+sub _best_fraction{#frac_standard
 	my ($self, $n, $m) = @_;
 	###LogSD	my	$phone = Log::Shiras::Telephone->new( name_space =>
 	###LogSD			$self->get_all_space . '::hidden::_util_function::_best_fraction', );
@@ -1748,13 +1748,13 @@ sub _best_fraction{#frac_standard
 	###LogSD				"Finding the best fraction", "Start numerator: $n", "Start denominator: $m" ] );
 	$n = $self->_integer_and_decimal($n);
 	$m = $self->_integer_and_decimal($m);
-	###LogSD	$phone->talk( level => 'info', message => [ 
+	###LogSD	$phone->talk( level => 'info', message => [
 	###LogSD		"Updated numerator and denominator ( $n / $m )" ] );
 	my $k = $self->_gcd($n, $m);
 	###LogSD	$phone->talk( level => 'info', message => [ "Greatest common divisor: $k" ] );
 	$n = $n/$k;
 	$m = $m/$k;
-	###LogSD	$phone->talk( level => 'info', message => [ 
+	###LogSD	$phone->talk( level => 'info', message => [
 	###LogSD		"Reduced numerator and denominator ( $n / $m )" ] );
 	if ($m < 0) {
 		###LogSD	$phone->talk( level => 'info', message => [ "the divisor is less than zero" ] );
@@ -1763,7 +1763,7 @@ sub _best_fraction{#frac_standard
 	}
 	$m = undef if $m == 1;
 	###LogSD	no warnings 'uninitialized';
-	###LogSD	$phone->talk( level => 'info', message => [ 
+	###LogSD	$phone->talk( level => 'info', message => [
 	###LogSD		"Final numerator and denominator ( $n / $m )" ] );
 	###LogSD	use warnings 'uninitialized';
 	if (wantarray) {
@@ -1779,7 +1779,7 @@ sub _integer_and_decimal {# In the future see if this will merge with _split_dec
 	my ( $self, $decimal ) = @_;
 	###LogSD	my	$phone = Log::Shiras::Telephone->new( name_space =>
 	###LogSD			$self->get_all_space . '::hidden::_util_function::_integer_and_decimal', );
-	###LogSD		$phone->talk( level => 'info', message => [ 
+	###LogSD		$phone->talk( level => 'info', message => [
 	###LogSD			"Splitting integer from decimal for: $decimal" ] );
 	my $integer = int( $decimal );
 	###LogSD		$phone->talk( level => 'info', message => [ "Integer: $integer" ] );
@@ -1796,14 +1796,14 @@ sub _gcd {
 	my ($self, $n, $m) = @_;
 	###LogSD	my	$phone = Log::Shiras::Telephone->new( name_space =>
 	###LogSD			$self->get_all_space . '::hidden::_util_function::_gcd', );
-	###LogSD		$phone->talk( level => 'info', message => [ 
+	###LogSD		$phone->talk( level => 'info', message => [
 	###LogSD			"Finding the greatest common divisor for ( $n and $m )" ] );
 	while ($m) {
 		my $k = $n % $m;
-		###LogSD	$phone->talk( level => 'info', message => [ 
+		###LogSD	$phone->talk( level => 'info', message => [
 		###LogSD		"Remainder after division: $k" ] );
 		($n, $m) = ($m, $k);
-		###LogSD	$phone->talk( level => 'info', message => [ 
+		###LogSD	$phone->talk( level => 'info', message => [
 		###LogSD		"Updated factors ( $n and $m )" ] );
 	}
 	return $n;
@@ -1811,10 +1811,10 @@ sub _gcd {
 
 around set_error => sub{
 	my ($orig, $self, $error) = @_;
- 
+
 	###LogSD	my	$phone = Log::Shiras::Telephone->new( name_space =>
 	###LogSD			$self->get_all_space . '::set_error', );
-	###LogSD		$phone->talk( level => 'info', message => [ 
+	###LogSD		$phone->talk( level => 'info', message => [
 	###LogSD			"Recording the error:", $error ] );
 	if( $self->_has_workbook_inst ){
 		$self->$orig( $error );
@@ -1827,7 +1827,7 @@ around get_epoch_year => sub{
 	my ($orig, $self, ) = @_;
 	###LogSD	my	$phone = Log::Shiras::Telephone->new( name_space =>
 	###LogSD			$self->get_all_space . '::get_epoch_year', );
-	###LogSD		$phone->talk( level => 'info', message => [ 
+	###LogSD		$phone->talk( level => 'info', message => [
 	###LogSD			"Looking for the epoch year" ] );
 	if( $self->_has_workbook_inst ){
 		return $self->$orig;
@@ -1838,7 +1838,7 @@ around get_epoch_year => sub{
 #########1 Phinish            3#########4#########5#########6#########7#########8#########9
 
 no Moose::Role;
-	
+
 1;
 
 #########1 Documentation      3#########4#########5#########6#########7#########8#########9
@@ -1853,7 +1853,7 @@ Spreadsheet::Reader::Format::ParseExcelFormatStrings - Convert Excel format stri
 	#!/usr/bin/env perl
 	package MyPackage;
 	use Moose;
-		
+
 	use lib '../../../../lib';
 	extends	'Spreadsheet::Reader::Format::FmtDefault';
 	with	'Spreadsheet::Reader::Format::ParseExcelFormatStrings';
@@ -1879,64 +1879,64 @@ Spreadsheet::Reader::Format::ParseExcelFormatStrings - Convert Excel format stri
 
 =head1 DESCRIPTION
 
-This is the parser that converts Excel custom format strings into code that can be used 
-to transform values into output matching the form defined by the format string.  The goal 
+This is the parser that converts Excel custom format strings into code that can be used
+to transform values into output matching the form defined by the format string.  The goal
 of this code is to support as much as possible the definition of L<excel custom format strings
-|https://support.office.com/en-us/article/Create-or-delete-a-custom-number-format-78f2a361-936b-4c03-8772-09fab54be7f4>.  
-If you find cases where this parser and the Excel definition or excecution differ please 
+|https://support.office.com/en-us/article/Create-or-delete-a-custom-number-format-78f2a361-936b-4c03-8772-09fab54be7f4>.
+If you find cases where this parser and the Excel definition or excecution differ please
 log a case in L<github|https://github.com/jandrew/Spreadsheet-XLSX-Reader-LibXML/issues>.
 
-This parser converts the format strings to L<Type::Tiny> objects that have the appropriate 
-built in coercions.  Any replacement of this engine for use with 
-L<Spreadsheet::Reader::Format> I<and L<Spreadsheet::Reader::ExcelXML>> must output objects 
-that have the methods 'display_name' and 'assert_coerce'.  'display_name' is used by the 
-overall package to determine the cell type and should return a unique name containing an 
-indication of the output data type with either 'DATE' or 'NUMBER' in the name.  Otherwise 
-the cell type is assumed to be text.  L<Spreadsheet::Reader::ExcelXML> uses 'assert_coerce' 
+This parser converts the format strings to L<Type::Tiny> objects that have the appropriate
+built in coercions.  Any replacement of this engine for use with
+L<Spreadsheet::Reader::Format> I<and L<Spreadsheet::Reader::ExcelXML>> must output objects
+that have the methods 'display_name' and 'assert_coerce'.  'display_name' is used by the
+overall package to determine the cell type and should return a unique name containing an
+indication of the output data type with either 'DATE' or 'NUMBER' in the name.  Otherwise
+the cell type is assumed to be text.  L<Spreadsheet::Reader::ExcelXML> uses 'assert_coerce'
 as the method to transform the raw value to the formatted value.
 
-Excel format strings can have up to four parts separated by semi-colons.  The four parts 
-are positive, zero, negative, and text.  In the Excel application the text section is just 
+Excel format strings can have up to four parts separated by semi-colons.  The four parts
+are positive, zero, negative, and text.  In the Excel application the text section is just
 a pass through.  I<This is how excel handles L<dates earlier than 1900sh
-|DateTimeX::Format::Excel/DESCRIPTION>>.  This parser deviates from that for dates.  Since 
-this parser provides code that parses Excel date numbers into a L<DateTime> object (and 
-then L<potentially back|/datetime_dates> to a differently formatted string) it also 
-attempts to parse strings to DateTime objects if the cell has a date format applied.  All 
+|DateTimeX::Format::Excel/DESCRIPTION>>.  This parser deviates from that for dates.  Since
+this parser provides code that parses Excel date numbers into a L<DateTime> object (and
+then L<potentially back|/datetime_dates> to a differently formatted string) it also
+attempts to parse strings to DateTime objects if the cell has a date format applied.  All
 other types of Excel number conversions still treat strings as a pass through.
 
-To replace this module just build a L<Moose::Role|Moose::Manual::Roles> that delivers 
-the method L<parse_excel_format_string|/parse_excel_format_string( $string, $name )>  and 
+To replace this module just build a L<Moose::Role|Moose::Manual::Roles> that delivers
+the method L<parse_excel_format_string|/parse_excel_format_string( $string, $name )>  and
 L<get_defined_conversion|/get_defined_conversion( $position )>. See the L<documentation
-|Spreadsheet::Reader::Format::FormatInterface> for the format interface to integrate into 
+|Spreadsheet::Reader::Format::FormatInterface> for the format interface to integrate into
 the package.
 
 =head2 Caveat Utilitor
 
-The decimal (real number) to fraction conversion implementation here is processing 
-intensive.  I erred on the side of accuracy over speed.  While I tried my best to 
-provide equivalent accuracy to the Excel output I was unable to duplicate the results 
-in all cases.  In those cases this package provides a more precise result than Excel.  
-If you are experiencing delays when reading fraction formatted values then this package 
-is a place to investigate.  In order to get the most accurate answer this parser 
-initially uses the L<continued fraction|http://en.wikipedia.org/wiki/Continued_fraction> 
-algorythm to calculate a possible fraction for the pased $decimal value with the 
-setting of 20 max iterations and a maximum denominator width defined by the format 
-string.  If that does not resolve satisfactorily it then calculates -all- over/under 
-numerators with decreasing denominators from the maximum denominator (based on the 
-format string) all the way to the denominator of 2 and takes the most accurate result.  
-There is no early-out available in this computation so if you reach this point for multi 
-digit denominators things slow down.  (Not that continued fractions are 
-computationally so cheap.)  However, dual staging the calculation this way yields either 
-the same result as Excel or a more accurate result while providing a possible early out 
-in the continued fraction portion.  I was unable to even come close to Excel output 
-otherwise.  If you have a faster conversion or just want to opt out for specific cells 
-without replacing this whole parser then use the worksheet method 
-L<Spreadsheet::Reader::ExcelXML::Worksheet/set_custom_formats( $key =E<gt> $format_object_or_string )>.  
+The decimal (real number) to fraction conversion implementation here is processing
+intensive.  I erred on the side of accuracy over speed.  While I tried my best to
+provide equivalent accuracy to the Excel output I was unable to duplicate the results
+in all cases.  In those cases this package provides a more precise result than Excel.
+If you are experiencing delays when reading fraction formatted values then this package
+is a place to investigate.  In order to get the most accurate answer this parser
+initially uses the L<continued fraction|http://en.wikipedia.org/wiki/Continued_fraction>
+algorythm to calculate a possible fraction for the pased $decimal value with the
+setting of 20 max iterations and a maximum denominator width defined by the format
+string.  If that does not resolve satisfactorily it then calculates -all- over/under
+numerators with decreasing denominators from the maximum denominator (based on the
+format string) all the way to the denominator of 2 and takes the most accurate result.
+There is no early-out available in this computation so if you reach this point for multi
+digit denominators things slow down.  (Not that continued fractions are
+computationally so cheap.)  However, dual staging the calculation this way yields either
+the same result as Excel or a more accurate result while providing a possible early out
+in the continued fraction portion.  I was unable to even come close to Excel output
+otherwise.  If you have a faster conversion or just want to opt out for specific cells
+without replacing this whole parser then use the worksheet method
+L<Spreadsheet::Reader::ExcelXML::Worksheet/set_custom_formats( $key =E<gt> $format_object_or_string )>.
 I<hint: $format_object_or_string = '@' will set a pass through.>
 
 =head2 requires
 
-These are method(s) used by this role but not provided by the role.  Any class consuming this 
+These are method(s) used by this role but not provided by the role.  Any class consuming this
 role will not build without first providing this(ese) methods prior to loading this role.
 
 =head3 get_defined_excel_format
@@ -1951,8 +1951,8 @@ See L<Spreadsheet::Reader::Format::FmtDefault/defined_excel_translations>
 
 =head2 Methods
 
-These are the methods provided by this role to whatever class or instance inherits this 
-role.  For additional ParseExcelFormatStrings options see the L<Attributes|/Attributes> 
+These are the methods provided by this role to whatever class or instance inherits this
+role.  For additional ParseExcelFormatStrings options see the L<Attributes|/Attributes>
 section.
 
 =head3 parse_excel_format_string( $string, $name )
@@ -1960,27 +1960,27 @@ section.
 =over
 
 B<Definition:> This is the method to convert Excel L<format strings
-|https://support.office.com/en-us/article/Create-or-delete-a-custom-number-format-83657ca7-9dbe-4ee5-9c89-d8bf836e028e?ui=en-US&rs=en-US&ad=US> 
-into L<Type::Tiny> objects with built in coercions.  The type coercion objects are then used to 
-convert L<unformatted|Spreadsheet::Reader::Format::Cell/unformatted> values into formatted 
-values using the L<assert_coerce|Type::Coercion/Coercion> method. Coercions built by this module 
-allow for the format string to have up to four parts separated by semi-colons.  These four parts 
-correlate to four different data input ranges.  The four parts are positive, zero, negative, and 
-text.  If three substrings are sent then the data input is split to (positive and zero), negative, 
-and text.  If two input types are sent the data input is split between numbers and text.  One input 
-type is a take all comers type with the exception of dates.  When dates are built by this module it 
-always adds a possible from-text conversion to process Excel pre-1900ish dates.  This is because 
-Excel does not record dates prior to 1900ish as numbers.  All date unformatted values are then 
-processed into and then L<potentially|/datetime_dates> back out of L<DateTime> objects.  This 
-requires L<Type::Tiny::Manual::Coercions/Chained Coercions>.  The two packages used for conversion 
+|https://support.office.com/en-us/article/Create-or-delete-a-custom-number-format-83657ca7-9dbe-4ee5-9c89-d8bf836e028e?ui=en-US&rs=en-US&ad=US>
+into L<Type::Tiny> objects with built in coercions.  The type coercion objects are then used to
+convert L<unformatted|Spreadsheet::Reader::Format::Cell/unformatted> values into formatted
+values using the L<assert_coerce|Type::Coercion/Coercion> method. Coercions built by this module
+allow for the format string to have up to four parts separated by semi-colons.  These four parts
+correlate to four different data input ranges.  The four parts are positive, zero, negative, and
+text.  If three substrings are sent then the data input is split to (positive and zero), negative,
+and text.  If two input types are sent the data input is split between numbers and text.  One input
+type is a take all comers type with the exception of dates.  When dates are built by this module it
+always adds a possible from-text conversion to process Excel pre-1900ish dates.  This is because
+Excel does not record dates prior to 1900ish as numbers.  All date unformatted values are then
+processed into and then L<potentially|/datetime_dates> back out of L<DateTime> objects.  This
+requires L<Type::Tiny::Manual::Coercions/Chained Coercions>.  The two packages used for conversion
 to DateTime objects are L<DateTime::Format::Flexible> and L<DateTimeX::Format::Excel>.
 
 B<Accepts:> an Excel number L<format string
-|https://support.office.com/en-us/article/Create-or-delete-a-custom-number-format-83657ca7-9dbe-4ee5-9c89-d8bf836e028e?ui=en-US&rs=en-US&ad=US> 
-and a conversion name stored in the Type::Tiny object.  This package will auto-generate a name if 
+|https://support.office.com/en-us/article/Create-or-delete-a-custom-number-format-83657ca7-9dbe-4ee5-9c89-d8bf836e028e?ui=en-US&rs=en-US&ad=US>
+and a conversion name stored in the Type::Tiny object.  This package will auto-generate a name if
 none is given
 
-B<Returns:> a L<Type::Tiny> object with type coercions and pre-filters set for each input type 
+B<Returns:> a L<Type::Tiny> object with type coercions and pre-filters set for each input type
 from the formatting string
 
 =back
@@ -1989,30 +1989,30 @@ from the formatting string
 
 =over
 
-B<Definition:> This is a helper method that combines the call to 
-L<Spreadsheet::Reader::Format::FmtDefault/get_defined_excel_format( $position )> and 
+B<Definition:> This is a helper method that combines the call to
+L<Spreadsheet::Reader::Format::FmtDefault/get_defined_excel_format( $position )> and
 parse_excel_format_string above in order to get the final result with one call.
 
 B<Accepts:> an Excel default format position
 
-B<Returns:> a L<Type::Tiny> object with type coercions and pre-filters set for each input type 
+B<Returns:> a L<Type::Tiny> object with type coercions and pre-filters set for each input type
 from the formatting string
 
 =back
 
 =head2 Attributes
 
-Data passed to new when creating a class or instance containing this role.   For 
-modification of these attributes see the listed 'attribute methods'.  For more 
+Data passed to new when creating a class or instance containing this role.   For
+modification of these attributes see the listed 'attribute methods'.  For more
 information on attributes see L<Moose::Manual::Attributes>.
-		
+
 =head3 workbook_inst
 
 =over
 
-B<Definition:> This role works better if it has access to two workbook methods 
-there are defaults built in if the workbook is not connected but the package no 
-longer responds dynamically when that connection is broken.  This instance is a 
+B<Definition:> This role works better if it has access to two workbook methods
+there are defaults built in if the workbook is not connected but the package no
+longer responds dynamically when that connection is broken.  This instance is a
 way for this role to see those settings.
 
 B<Required:> No but it's really nice
@@ -2020,7 +2020,7 @@ B<Required:> No but it's really nice
 B<Range:> an instance of the L<Spreadsheet::Reader::ExcelXML> class
 
 B<attribute methods> Methods provided to adjust this attribute
-		
+
 =over
 
 B<set_workbook_inst( $instance )>
@@ -2036,7 +2036,7 @@ B<Definition:> sets the workbook instance
 B<delegated methods> Methods provided from the object stored in the attribute
 
 	method_name => method_delegated_from_link
-		
+
 =over
 
 B<set_error( $error_string )> => L<Spreadsheet::Reader::ExcelXML/set_error>
@@ -2051,10 +2051,10 @@ B<get_epoch_year> => L<Spreadsheet::Reader::ExcelXML/get_epoch_year>
 
 =over
 
-B<Definition:> In order to save re-building the coercion each time they are 
-requested, the built coercions can be cached with the format string as the key.  
-This attribute sets whether caching is turned on or not.  In rare cases with 
-lots of unique formats this would allow a reduction in RAM consumtion at the 
+B<Definition:> In order to save re-building the coercion each time they are
+requested, the built coercions can be cached with the format string as the key.
+This attribute sets whether caching is turned on or not.  In rare cases with
+lots of unique formats this would allow a reduction in RAM consumtion at the
 price of speed.
 
 B<Range:> Boolean
@@ -2062,7 +2062,7 @@ B<Range:> Boolean
 B<Default:> 1 = caching is on
 
 B<attribute methods> Methods provided to adjust this attribute
-		
+
 =over
 
 B<get_cache_behavior>
@@ -2091,16 +2091,16 @@ B<Range:> Boolean 1 = cache formats, 0 = Don't cache formats
 
 =over
 
-B<Definition:> It may be that you desire the full L<DateTime> object as output 
-rather than the finalized datestring when converting unformatted date data to 
-formatted date data. This attribute sets whether data coersions are built to do 
+B<Definition:> It may be that you desire the full L<DateTime> object as output
+rather than the finalized datestring when converting unformatted date data to
+formatted date data. This attribute sets whether data coersions are built to do
 the full conversion or just to a DateTime object in return.
 
-B<Default:> 0 = unformatted values are coerced completely to date strings (1 = 
+B<Default:> 0 = unformatted values are coerced completely to date strings (1 =
 stop at DateTime objects)
 
 B<attribute methods> Methods provided to adjust this attribute.
-		
+
 =over
 
 B<get_date_behavior>
@@ -2112,14 +2112,14 @@ B<Definition:> returns the value of the attribute
 =back
 
 =back
-		
+
 =over
 
 B<set_date_behavior( $bool )>
 
 =over
 
-B<Definition:> sets the attribute value (only L<new|/cache_formats> coercions 
+B<Definition:> sets the attribute value (only L<new|/cache_formats> coercions
 are affected)
 
 B<Accepts:> Boolean values
@@ -2136,16 +2136,16 @@ B<Delegated to the workbook class:> yes
 
 =over
 
-B<Definition:> This is a way to check for DD-MM-YY formatting of 
-inbound (read from the file) date stringsprior to checking for MM-DD-YY.  
-Since the package always checks both ways when the number is ambiguous 
-the goal is to catch data where the substring for DD < 13 and assign it 
+B<Definition:> This is a way to check for DD-MM-YY formatting of
+inbound (read from the file) date stringsprior to checking for MM-DD-YY.
+Since the package always checks both ways when the number is ambiguous
+the goal is to catch data where the substring for DD < 13 and assign it
 correctly.
 
 B<Default:> 0 = MM-DD-YY[YY] is tested first
 
 B<attribute methods> Methods provided to adjust this attribute
-		
+
 =over
 
 B<get_european_first>

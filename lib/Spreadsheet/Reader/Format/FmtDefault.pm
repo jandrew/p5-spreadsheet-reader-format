@@ -1,5 +1,5 @@
 package Spreadsheet::Reader::Format::FmtDefault;
-use version; our $VERSION = version->declare('v0.4.0');
+use version; our $VERSION = version->declare('v0.6.0');
 ###LogSD	warn "You uncovered internal logging statements for Spreadsheet::Reader::Format::FmtDefault-$VERSION";
 
 use	5.010;
@@ -22,7 +22,7 @@ has excel_region =>(
 		reader	=> 'get_excel_region',
 		writer	=> 'set_excel_region',
 	);
-	
+
 has	target_encoding =>(
 		isa			=> Str,
 		reader		=> 'get_target_encoding',
@@ -158,7 +158,7 @@ sub	change_output_encoding{
 
 no Moose;
 __PACKAGE__->meta->make_immutable;
-	
+
 1;
 
 #########1 Documentation      3#########4#########5#########6#########7#########8#########9
@@ -191,54 +191,54 @@ Spreadsheet::Reader::Format::FmtDefault - Default number and string formats
 	# 01: yyyy-mm-dd
 	# 02: yyyy-mm-dd
 	# 03: yyyy-mm-dd
-	# 04: MySpecialFormat	
+	# 04: MySpecialFormat
 	###########################
-    
+
 =head1 DESCRIPTION
 
-This is the default localization class used by L<Spreadsheet::Reader::Format>.  It is 
-separate from the other parts of the formatter class to isolate the basic elements of 
-localization to allow for the least work swapping it out.  This class can be configured 
-or adjused without replacing it or you can use it as a template for a new localization.  
-To use the class as it stands just adjust the attributes to change the outcome of the 
-methods.  If you re-write this class it is used as a base class and must provide the 
+This is the default localization class used by L<Spreadsheet::Reader::Format>.  It is
+separate from the other parts of the formatter class to isolate the basic elements of
+localization to allow for the least work swapping it out.  This class can be configured
+or adjused without replacing it or you can use it as a template for a new localization.
+To use the class as it stands just adjust the attributes to change the outcome of the
+methods.  If you re-write this class it is used as a base class and must provide the
 same methods.
 
-This class provides two basic functionalities.  First, it stores and can retreive defined 
-excel format strings.  Excel uses these (common) formats to assign conversions to various 
-cells in the sheet rather than storing a conversion string.  Specifically these are the 
-conversions provided to Excel end users in the pull down menu if they do not want to 
-write their own custom conversion strings.  This specific class represents the standard 
-set of parsing strings localized for the United States found in Excel.  There is one 
-exception where position 14 (0x0E) is different than the Excel implementation since the 
-Excel setting for that position breaks so many database data types.  Where excel users 
-have written their own custom conversion definition strings they are stored in the 
-L<Styles|Spreadsheet::Reader::ExcelXML::Styles> file of the zipped archive.  These strings 
-are implemented by a parsing engine to convert raw values to formatted values.  The rules 
+This class provides two basic functionalities.  First, it stores and can retreive defined
+excel format strings.  Excel uses these (common) formats to assign conversions to various
+cells in the sheet rather than storing a conversion string.  Specifically these are the
+conversions provided to Excel end users in the pull down menu if they do not want to
+write their own custom conversion strings.  This specific class represents the standard
+set of parsing strings localized for the United States found in Excel.  There is one
+exception where position 14 (0x0E) is different than the Excel implementation since the
+Excel setting for that position breaks so many database data types.  Where excel users
+have written their own custom conversion definition strings they are stored in the
+L<Styles|Spreadsheet::Reader::ExcelXML::Styles> file of the zipped archive.  These strings
+are implemented by a parsing engine to convert raw values to formatted values.  The rules
 for these conversions are layed out in L<the Excel documentation
-|https://support.office.com/en-us/article/Create-or-delete-a-custom-number-format-78f2a361-936b-4c03-8772-09fab54be7f4>.  
-The default implementation of these rules is done in 
-L<Spreadsheet::Reader::Format::ParseExcelFormatStrings>.  The second 
-functionality is string decoding.  It is assumed that any file encoding is handled by 
-the Excel file reader. However, once the file has been read into memory you may wish 
+|https://support.office.com/en-us/article/Create-or-delete-a-custom-number-format-78f2a361-936b-4c03-8772-09fab54be7f4>.
+The default implementation of these rules is done in
+L<Spreadsheet::Reader::Format::ParseExcelFormatStrings>.  The second
+functionality is string decoding.  It is assumed that any file encoding is handled by
+the Excel file reader. However, once the file has been read into memory you may wish
 to decode it to some specific output format.  The attribute L<target_encoding
-|/target_encoding> and the method L<change_output_encoding|/change_output_encoding( $string )> 
+|/target_encoding> and the method L<change_output_encoding|/change_output_encoding( $string )>
 use L<Encode> to do this.
 
-For an explanation of functionality for a fully built Formatter class see the 
+For an explanation of functionality for a fully built Formatter class see the
 documentation for L<Spreadsheet::Reader::Format>.
 
 =head2 Attributes
 
-Data passed to new when creating an instance containing this class. For modification 
-of these attributes see the listed 'attribute methods' and L<Methods|/Methods>.  For 
+Data passed to new when creating an instance containing this class. For modification
+of these attributes see the listed 'attribute methods' and L<Methods|/Methods>.  For
 more information on attributes see L<Moose::Manual::Attributes>.
 
 =head3 excel_region
 
 =over
 
-B<Definition:> This records the target region of this localization role (Not the region of the 
+B<Definition:> This records the target region of this localization role (Not the region of the
 Excel workbook being parsed).  It's mostly a reference value.
 
 B<Default:> en = english
@@ -246,7 +246,7 @@ B<Default:> en = english
 B<Attribute required:> no
 
 B<attribute methods> Methods provided to adjust this attribute
-		
+
 =over
 
 B<get_excel_region>
@@ -273,28 +273,28 @@ B<Definition:> sets the value of the attribute.
 
 =over
 
-B<Definition:> This is the target output encoding.  If it is not defined the string 
-transformation step L<change_output_encoding|/change_output_encoding( $string )> becomes a 
-passthrough.  When the value is loaded it is used as a 'decode' target by L<Encode> 
-to transform the internally (unicode) stored perl string to some target 'output' 
+B<Definition:> This is the target output encoding.  If it is not defined the string
+transformation step L<change_output_encoding|/change_output_encoding( $string )> becomes a
+passthrough.  When the value is loaded it is used as a 'decode' target by L<Encode>
+to transform the internally (unicode) stored perl string to some target 'output'
 formatting.
 
 B<Attribute required:> no
 
 B<Default:> none
 
-B<Range:> Any encoding recognized by L<Encode|Encode/Listing available encodings> 
+B<Range:> Any encoding recognized by L<Encode|Encode/Listing available encodings>
 (No type certification is done)
 
 B<attribute methods> Methods provided to adjust this attribute
-		
+
 =over
 
 B<set_target_encoding( $encoding )>
 
 =over
 
-B<Definition:> This should be recognized by L<Encode/Listing available encodings> 
+B<Definition:> This should be recognized by L<Encode/Listing available encodings>
 I<no testing of this compatability is done>
 
 =back
@@ -323,15 +323,15 @@ B<Definition:> Returns positive if the target_encoding has been set
 
 =over
 
-B<Definition:> In Excel part of localization is the way numbers are displayed.  
-Excel manages that with a default list of format strings that make the numbers appear 
-in a familiar way.  These are the choices provided in the pull down menu for formats 
-if you did not want to write your own custom format string.  This is where you store 
-that list for this package.  In this case the numbers are stored as hash key => value 
-pairs where the keys are array positions (written in hex) and the values are the Excel 
-readable format strings (definitions).  Beware that if you change the list your 
-parser may break if you don't supply replacements for all the values in the default 
-list.  If you just want to replace some of the values use the method 
+B<Definition:> In Excel part of localization is the way numbers are displayed.
+Excel manages that with a default list of format strings that make the numbers appear
+in a familiar way.  These are the choices provided in the pull down menu for formats
+if you did not want to write your own custom format string.  This is where you store
+that list for this package.  In this case the numbers are stored as hash key => value
+pairs where the keys are array positions (written in hex) and the values are the Excel
+readable format strings (definitions).  Beware that if you change the list your
+parser may break if you don't supply replacements for all the values in the default
+list.  If you just want to replace some of the values use the method
 L<set_defined_excel_formats|/set_defined_excel_formats( %args )>.
 
 B<Attribute required:> yes
@@ -378,11 +378,11 @@ B<Default:>
 		0x31 => '@',
 	}
 
-B<Range:> Any hashref of formats recognized by 
+B<Range:> Any hashref of formats recognized by
 L<Spreadsheet::Reader::Format::ParseExcelFormatStrings>
 
 B<attribute methods> Methods provided to by the attribute to adjust it.
-		
+
 =over
 
 B<total_defined_excel_formats>
@@ -393,7 +393,7 @@ B<Definition:> get the count of the current key => value pairs
 
 =back
 
-See L<get_defined_excel_format|/get_defined_excel_format( $position )> and 
+See L<get_defined_excel_format|/get_defined_excel_format( $position )> and
 L<set_defined_excel_formats|/set_defined_excel_formats( %args )>
 
 =back
@@ -402,19 +402,19 @@ L<set_defined_excel_formats|/set_defined_excel_formats( %args )>
 
 =head2 Methods
 
-These are methods to use this class.  For additional FmtDefault options see the 
+These are methods to use this class.  For additional FmtDefault options see the
 L<Attributes|/Attributes> section.
 
 =head3 get_defined_excel_format( $position )
 
 =over
 
-B<Definition:> This will return the preset excel format string for the stored position 
-from the attribute L<defined_excel_translations|/defined_excel_translations>.  
-The positions are actually stored in a hash where the keys are integers representing a 
+B<Definition:> This will return the preset excel format string for the stored position
+from the attribute L<defined_excel_translations|/defined_excel_translations>.
+The positions are actually stored in a hash where the keys are integers representing a
 position in an order list.
 
-B<Accepts:> an integer or an octal number or octal string for the format string 
+B<Accepts:> an integer or an octal number or octal string for the format string
 $position
 
 B<Returns:> an excel format string (not a built coercion)
@@ -425,16 +425,16 @@ B<Returns:> an excel format string (not a built coercion)
 
 =over
 
-B<Definition:> This will set the excel format strings for the indicated positions 
+B<Definition:> This will set the excel format strings for the indicated positions
 in the attribute L<defined_excel_translations|/defined_excel_translations>.
 
-B<Accepts:> a Hash list, a hash ref (both with keys representing positions), or an arrayref 
-of strings with the update strings in the target position.  All passed argument B<lists> greater 
-than one will be assumed to be hash arguments and must come in pairs.  If a single argument is 
-passed then that value is checked to see if it is a hashref or an arrayref.  For passed 
-arrayrefs all empty positions are ignored meaning that any preexisting value in that positions 
-is left in force.  To erase the default value send '@' (passthrough) as the format string for 
-that position.  This function does not do any string validation.  The validation is done when 
+B<Accepts:> a Hash list, a hash ref (both with keys representing positions), or an arrayref
+of strings with the update strings in the target position.  All passed argument B<lists> greater
+than one will be assumed to be hash arguments and must come in pairs.  If a single argument is
+passed then that value is checked to see if it is a hashref or an arrayref.  For passed
+arrayrefs all empty positions are ignored meaning that any preexisting value in that positions
+is left in force.  To erase the default value send '@' (passthrough) as the format string for
+that position.  This function does not do any string validation.  The validation is done when
 the coercion is generated.
 
 B<Returns:> 1 for success
@@ -445,7 +445,7 @@ B<Returns:> 1 for success
 
 =over
 
-B<Definition:> This should be called on the output string prior to performing any 
+B<Definition:> This should be called on the output string prior to performing any
 coercion.
 
 B<Accepts:> a perl unicode coded string
