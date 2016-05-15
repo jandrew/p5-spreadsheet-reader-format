@@ -6,13 +6,17 @@ Uses the change tracking convention
 ! Bug fix.
 * Place holder
 
-NOTE: This software is designated as beta quality until this notice is removed.  The goal is to 
-be used for Spreadsheet::Reader::ExcelXML and adjusted to work with Spreadsheet::ParseExcel prior 
+NOTE: This software is designated as beta quality until this notice is removed.  The goal is to
+be used for Spreadsheet::Reader::ExcelXML and adjusted to work with Spreadsheet::ParseExcel prior
 to the 1.0 release.
 
 {{$NEXT}}
 
-	* Another Cool Change
+	* Another cool change
+
+v0.4.0    2016-05-14 20:44:52-07:00 America/Los_Angeles
+
+	! Fix a CPAN testers fail where Test::Moose wasn't loaded in time
 
 v0.2.10   2016-04-08 09:53:28-07:00 America/Los_Angeles
 
@@ -45,5 +49,5 @@ v0.1_3    2016-04-02 20:39:46-07:00 America/Los_Angeles (TRIAL RELEASE)
 	! Turn on AutoPrereqs for Dist::Zilla to get all the pre-reqs
 
 v0.1_1    2016-04-02 20:30:23-07:00 America/Los_Angeles (TRIAL RELEASE)
-	
+
 	+ Initial release to move the formatter out of Spreadsheet::XLSX::Reader::LibXML

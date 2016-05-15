@@ -1,14 +1,14 @@
 package Spreadsheet::Reader::Format;
-use version  0.77; our $VERSION = version->declare('v0.2.10');
+use version  0.77; our $VERSION = version->declare('v0.4.0');
 ###LogSD	warn "You uncovered internal logging statements for Spreadsheet::Reader::Format-$VERSION";
 
 use 5.010;
 use Moose::Role;
 requires qw(
-		get_excel_region			has_target_encoding
+		get_excel_region				has_target_encoding
 		get_target_encoding			set_target_encoding
-		change_output_encoding		set_defined_excel_formats
-		get_defined_conversion		parse_excel_format_string
+		change_output_encoding	set_defined_excel_formats
+		get_defined_conversion	parse_excel_format_string
 		set_cache_behavior			set_date_behavior
 		set_european_first			set_workbook_inst
 	);
@@ -36,7 +36,7 @@ requires qw(
 #########1 Phinish            3#########4#########5#########6#########7#########8#########9
 
 no Moose::Role;
-	
+
 1;
 
 #########1 Documentation      3#########4#########5#########6#########7#########8#########9
@@ -108,7 +108,7 @@ Spreadsheet::Reader::Format - Formatting for various spreadsheet readers
 
 	# Set specific default custom formats here (for use in an excel parser)
 	$formatter->set_defined_excel_formats( 0x2C => 'MyCoolFormatHere' );
-	
+
 	# Use the formatter like Spreadsheet::ParseExcel
 	my $parser	= Spreadsheet::Reader::ExcelXML->new;
 	my $workbook = $parser->parse( '../t/test_files/TestBook.xlsx', $formatter );
@@ -116,48 +116,48 @@ Spreadsheet::Reader::Format - Formatting for various spreadsheet readers
 
 =head1 DESCRIPTION
 
-In general a completly built formatter class as shown in the SYNOPSYS is already used 
-by the package L<Spreadsheet::Reader::ExcelXML> to turn unformatted data into formatted 
-data.  The purpose is to allow the Excel equivalent of localization of the output.  The 
-general localization options are mostly found at the workbook level.  Individual cells 
-also contain information about how that cell data should be formatted.  
+In general a completly built formatter class as shown in the SYNOPSYS is already used
+by the package L<Spreadsheet::Reader::ExcelXML> to turn unformatted data into formatted
+data.  The purpose is to allow the Excel equivalent of localization of the output.  The
+general localization options are mostly found at the workbook level.  Individual cells
+also contain information about how that cell data should be formatted.
 
-It is possible to insert alternate roles in the Formatter build or use methods 
-to customize the defaults used by the formatter for use in the Spreadsheet reader.  It 
-is also possible to use the formatter to output custom format code for post processing 
+It is possible to insert alternate roles in the Formatter build or use methods
+to customize the defaults used by the formatter for use in the Spreadsheet reader.  It
+is also possible to use the formatter to output custom format code for post processing
 output..
 
 =head2 Module Description
 
 This module is written to be an L<Interface
-|http://www.codeproject.com/Articles/22769/Introduction-to-Object-Oriented-Programming-Concep#Interface> 
-for the Formatter class used in L<Spreadsheet::Reader::ExcelXML> so that the core 
-L<parsing engine|Spreadsheet::Reader::Format::ParseExcelFormatStrings> and the 
-L<regional formatting settings|Spreadsheet::Reader::Format::FmtDefault> for the 
-parser can easily be swapped.  This interface really only defines method requirements for 
-the undlerlying instance since the engine it uses was custom-built for 
-L<Spreadsheet::Reader::ExcelXML>.  However, adding a shim to this package so it can 
-be used by L<Spreadsheet::ParseExcel> (for example) should be easier because of the 
+|http://www.codeproject.com/Articles/22769/Introduction-to-Object-Oriented-Programming-Concep#Interface>
+for the Formatter class used in L<Spreadsheet::Reader::ExcelXML> so that the core
+L<parsing engine|Spreadsheet::Reader::Format::ParseExcelFormatStrings> and the
+L<regional formatting settings|Spreadsheet::Reader::Format::FmtDefault> for the
+parser can easily be swapped.  This interface really only defines method requirements for
+the undlerlying instance since the engine it uses was custom-built for
+L<Spreadsheet::Reader::ExcelXML>.  However, adding a shim to this package so it can
+be used by L<Spreadsheet::ParseExcel> (for example) should be easier because of the
 abstraction.
 
-This module does not provide unique methods.  It just requires methods and provides a 
-uniform interface for the workbook package.  Additional attributes and methods provided 
-by the sub modules may be available to the instance but are not in the strictest sence 
+This module does not provide unique methods.  It just requires methods and provides a
+uniform interface for the workbook package.  Additional attributes and methods provided
+by the sub modules may be available to the instance but are not in the strictest sence
 required.
 
 =head2 Methods
 
-These are the methods required by this interface.  Links to the default implementation 
+These are the methods required by this interface.  Links to the default implementation
 of each method are provided but any customization of the formatter instance for Spreadsheet
 parsing will as a minimum require these methods.
-		
+
 =head3 parse_excel_format_string( $string, $name )
 
 =over
 
-B<Definition:> This is the method to convert Excel format strings to code that will  
-translate raw data from the file to formatted output in the form defined by the string.  
-It is possible to pass a format name that will be incorperated so that the method 
+B<Definition:> This is the method to convert Excel format strings to code that will
+translate raw data from the file to formatted output in the form defined by the string.
+It is possible to pass a format name that will be incorperated so that the method
 $coercion->display_name returns $name.
 
 B<Default source:> L<Spreadsheet::Reader::Format::ParseExcelFormatStrings/parse_excel_format_string( $string, $name )>
@@ -168,7 +168,7 @@ B<Default source:> L<Spreadsheet::Reader::Format::ParseExcelFormatStrings/parse_
 
 =over
 
-B<Definition:> This method returns the code for string conversion for a pre-defined 
+B<Definition:> This method returns the code for string conversion for a pre-defined
 conversion by position.
 
 B<Default source:> L<Spreadsheet::Reader::Format::ParseExcelFormatStrings/get_defined_conversion( $position )>
@@ -220,7 +220,7 @@ B<Default source:> L<Spreadsheet::Reader::Format::FmtDefault/change_output_encod
 
 =over
 
-B<Definition:> It may be useful for this instance to self identify it's target output.  
+B<Definition:> It may be useful for this instance to self identify it's target output.
 This method returns that value
 
 B<Default source:> L<Spreadsheet::Reader::Format::FmtDefault/get_excel_region>
@@ -231,8 +231,8 @@ B<Default source:> L<Spreadsheet::Reader::Format::FmtDefault/get_excel_region>
 
 =over
 
-B<Definition:> This allows for adjustment and or addition to the output format lookup table.  
-The default implementation allows for multiple ways to do this so please review that documentation 
+B<Definition:> This allows for adjustment and or addition to the output format lookup table.
+The default implementation allows for multiple ways to do this so please review that documentation
 for details.
 
 B<Default source:> L<Spreadsheet::Reader::Format::FmtDefault/set_defined_excel_formats( %args )>
@@ -253,7 +253,7 @@ B<Default source:> L<Spreadsheet::Reader::Format::ParseExcelFormatStrings/set_ca
 
 =over
 
-B<Definition:> This sets the flag that interrupts the date formatting to return a datetime object rather 
+B<Definition:> This sets the flag that interrupts the date formatting to return a datetime object rather
 than a date string
 
 B<Default source:> L<Spreadsheet::Reader::Format::ParseExcelFormatStrings/set_date_behavior( $bool )>
@@ -264,8 +264,8 @@ B<Default source:> L<Spreadsheet::Reader::Format::ParseExcelFormatStrings/set_da
 
 =over
 
-B<Definition:> This also sets a flag dealing with dates.  The date behavior that is affected here 
-involves parsing date strings (not excel date numbers) and checks the DD-MM-YY form before it 
+B<Definition:> This also sets a flag dealing with dates.  The date behavior that is affected here
+involves parsing date strings (not excel date numbers) and checks the DD-MM-YY form before it
 checkes the MM-DD-YY form when attempting to parse date strings.
 
 B<Default source:> L<Spreadsheet::Reader::Format::ParseExcelFormatStrings/set_european_first( $bool )>
@@ -276,9 +276,9 @@ B<Default source:> L<Spreadsheet::Reader::Format::ParseExcelFormatStrings/set_eu
 
 =over
 
-B<Definition:> This sets the workbook instance in the Formatter instance.  
-L<Spreadsheet::Reader::ExcelXML> should do this automatically and will overwrite this attribute 
-if the end-user sets it.  The purpose of this instance is for the formatter to see some of the 
+B<Definition:> This sets the workbook instance in the Formatter instance.
+L<Spreadsheet::Reader::ExcelXML> should do this automatically and will overwrite this attribute
+if the end-user sets it.  The purpose of this instance is for the formatter to see some of the
 workbook level methods;
 
 B<Delegates:>
