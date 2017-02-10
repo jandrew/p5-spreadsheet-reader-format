@@ -1,5 +1,5 @@
 package Spreadsheet::Reader::Format::ParseExcelFormatStrings;
-use version; our $VERSION = version->declare('v0.6.0');
+use version; our $VERSION = version->declare('v0.6.2');
 ###LogSD	warn "You uncovered internal logging statements for Spreadsheet::Reader::Format::ParseExcelFormatStrings-$VERSION";
 
 use 5.010;
@@ -24,7 +24,7 @@ use Clone 'clone';
 use lib	'../../../../lib',;
 #~ ###LogSD	use Capture::Tiny 'capture_stderr';
 ###LogSD	use Log::Shiras::Telephone;
-###LogSD	use Log::Shiras::UnhideDebug;
+###LogSD	use Log::Shiras::Unhide;
 use	Spreadsheet::Reader::Format::Types qw(
 		PositiveNum					NegativeNum				ZeroOrUndef
 		NotNegativeNum				Excel_number_0

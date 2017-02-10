@@ -48,7 +48,7 @@ my %WriteMakefileArgs = (
     "Test::Most" => 0,
     "Test::TypeTiny" => 0
   },
-  "VERSION" => "v0.6.0",
+  "VERSION" => "v0.6.2",
   "test" => {
     "TESTS" => "t/Spreadsheet/Reader/*.t t/Spreadsheet/Reader/Format/*.t"
   }
