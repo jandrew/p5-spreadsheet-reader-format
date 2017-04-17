@@ -4,7 +4,7 @@
       "Jed Lund <jandrew@cpan.org>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 6.008, CPAN::Meta::Converter version 2.150005",
+   "generated_by" : "Dist::Zilla version 6.005, CPAN::Meta::Converter version 2.150005",
    "license" : [
       "perl_5"
    ],
@@ -25,6 +25,7 @@
             "Clone" : "0",
             "DateTime" : "0",
             "DateTime::Format::Flexible" : "0",
+            "DateTime::TimeZone" : "2.09",
             "DateTimeX::Format::Excel" : "0.014",
             "Encode" : "0",
             "IO::File" : "0",
@@ -58,19 +59,19 @@
    "provides" : {
       "Spreadsheet::Reader::Format" : {
          "file" : "lib/Spreadsheet/Reader/Format.pm",
-         "version" : "v0.6.2"
+         "version" : "v0.6.4"
       },
       "Spreadsheet::Reader::Format::FmtDefault" : {
          "file" : "lib/Spreadsheet/Reader/Format/FmtDefault.pm",
-         "version" : "v0.6.2"
+         "version" : "v0.6.4"
       },
       "Spreadsheet::Reader::Format::ParseExcelFormatStrings" : {
          "file" : "lib/Spreadsheet/Reader/Format/ParseExcelFormatStrings.pm",
-         "version" : "v0.6.2"
+         "version" : "v0.6.4"
       },
       "Spreadsheet::Reader::Format::Types" : {
          "file" : "lib/Spreadsheet/Reader/Format/Types.pm",
-         "version" : "v0.6.2"
+         "version" : "v0.6.4"
       }
    },
    "release_status" : "stable",
@@ -85,8 +86,7 @@
          "web" : "https://github.com/jandrew/p5-spreadsheet-reader-format"
       }
    },
-   "version" : "v0.6.2",
-   "x_authority" : "cpan:JANDREW",
-   "x_serialization_backend" : "Cpanel::JSON::XS version 3.0213"
+   "version" : "v0.6.4",
+   "x_authority" : "cpan:JANDREW"
 }
 

@@ -1,5 +1,5 @@
 package Spreadsheet::Reader::Format;
-use version  0.77; our $VERSION = version->declare('v0.6.2');
+use version  0.77; our $VERSION = version->declare('v0.6.4');
 ###LogSD	warn "You uncovered internal logging statements for Spreadsheet::Reader::Format-$VERSION";
 
 use 5.010;
@@ -330,7 +330,7 @@ it and/or modify it under the same terms as Perl itself.
 The full text of the license can be found in the
 LICENSE file included with this module.
 
-This software is copyrighted (c) 2016 by Jed Lund
+This software is copyrighted (c) 2016, 2017 by Jed Lund
 
 =head1 DEPENDENCIES
 
