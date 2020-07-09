@@ -202,7 +202,7 @@ my			$answer_list =[
 					['_($*#,##0.00_);_($*(#,##0.00);_($*"-"??_);_(@_)',undef,'$1.00','$1.12','$(111,111,111,111,115.00)','$1.50','$(1,234.57)','$59.00','$(60.00)'],
 					['mm:ss',undef,'00:00','41:44','47:13','00:10','00:01','41:44','16:58'],
 					['[h]:mm:ss',undef,'-1117548:59:59','2:41:44','1463:47:13','36:00:10','1320:00:01','1418:41:44','1448:16:58'],
-					['mm:ss.0',undef,'00:00.2','41:43.6','47:13.0','00:09.7','00:00.8','41:43.6','16:57.7'],
+					['mm:ss.0',undef,'00:00.2',['41:43.7','41:43.6'],'47:13.0','00:09.7',['00:00.9','00:00.8'],['41:43.7','41:43.6'],'16:57.7'],
 					['##0.0E+0',undef,'1.0E+0','-200.0E+0','2.0E+3','-2.0E+6','2.1E+3','-20.1E+3','200.0E-9','-41.3E-12'],
 					[ '@', 'Hello World', "It's a mad mad world" ],
 				],
@@ -345,9 +345,19 @@ ok			$coercion = $test_instance->get_defined_conversion( $position ),
 ###LogSD	}elsif( $position == $start_pos + 1 ){
 ###LogSD		exit 1;
 ###LogSD	}
-is			$coercion->assert_coerce( $question_list->[$test_group]->[$position]->[$row_pos - 1] ), $answer_list->[$test_group]->[$position]->[$row_pos],
+			my $answer = $answer_list->[$test_group]->[$position]->[$row_pos];
+			if (ref $answer eq "ARRAY") {
+				use version;
+				if (version->parse($DateTime::VERSION) <= version->parse('1.44')) { # Fixes issue #1 
+					$answer = $answer->[0];
+				}
+				else {
+					$answer = $answer->[1];
+				}
+			}
+is			$coercion->assert_coerce( $question_list->[$test_group]->[$position]->[$row_pos - 1] ), $answer,
 										,"Testing the excel default coercion -$position- to see if |$question_list->[$test_group]->[$position]->[$row_pos - 1]|" . 
-											" coerces to: $answer_list->[$test_group]->[$position]->[$row_pos]";
+											" coerces to: $answer";
 			#~ exit 1 if $position == 35 and $question_list->[$test_group]->[$position]->[$row_pos - 1] eq '';#######################################
 			} } }
 explain 								"...Test Done";
